@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+  <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>A Simple Film API</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/Film_API/CSS/document-styles.css" />
+  </head>
+  <body>
+    <container class="body-container">
+      <h1>FataleFlix</h1>
+      <h3>
+        This is a simple API built as a resource for film buffs looking for
+        their next unsettling & woman-centered screening.
+      </h3>
+      <container class="table-container><table class="version-table">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Date</th>
+              <th>Changes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>version 1</td>
+              <td>1/1/2020</td>
+              <td>initial deployment</td>
+            </tr>
+          </tbody>
+        </table>
+        <p></p>
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Request</th>
+              <th>URL</th>
+              <th>HTTP Method</th>
+              <th>Request Body Data Format</th>
+              <th>Response Body Data Format</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Generate a list of all films in the database</td>
+              <td>/films</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>A JSON object listing all data about films in the database.</td>
+            </tr>
+            <tr>
+              <td>Get information about a particular film</td>
+              <td>/films/:Title</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>
+                A JSON object holding information about a particular film
+                identified by title that includes a synopsis, information about
+                the director, release date, and genres.
+                <p style="color: #770000">
+                  {<br>id: 1,<br>
+                  title: "Jennifer's Body",<br>
+                  description: "When a demon takes possession of her,
+                  high-school
+                  hottie Jennifer (Megan Fox) turns a hungry eye on guys who
+                  never
+                  stood a chance with her before. While evil Jennifer satisfies
+                  her appetite for human flesh with the school's male
+                  population,
+                  her nerdy friend, Needy (Amanda Seyfried), learns what's
+                  happening and vows to put an end to the carnage.",<br>
+                  genre: "Comedy/Horror",<br>
+                  director: {<br>
+                  name: "Karyn Kusama",<br>
+                  biography:"Karyn Kusama was born on March 21, 1968 in
+                  Brooklyn,
+                  New York, USA as Karyn K. Kusama. She is a director and
+                  producer, known for The Invitation (2015), Girlfight (2000)
+                  and
+                  Æon Flux (2005).",<br>
+                  },<br>
+                  released: "2009",<br>
+                  poster: '',<br>
+                  }
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td>Return information about a genre by name</td>
+              <td>/films/Genre/:Title</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>A JSON object containing information about a genre by film
+                title.</td>
+            </tr>
+            <tr>
+              <td>Return information about a director by name.</td>
+              <td>/films/Director/:Name</td>
+              <td>GET</td>
+              <td>None</td>
+              <td>A JSON object holding information about a director based on
+                their filmography.<br>
+                <p style="color: #770000">
+                  director: {<br>
+                  name: "Ari Aster",<br>
+                  biography: "Ari Aster is an American director and screenwriter
+                  known for Hereditary and Midsommar.",<br>
+                  },</p></td>
+            </tr>
+            <tr>
+              <td>Allows new user to register</td>
+              <td>/users</td>
+              <td>POST</td>
+              <td>A JSON object that holds data about the new user to be added.
+                <p style="color: #770000">{<br>
+                  "Username": "contortion",<br>
+                  "Password": "d0ubl3j0int3d",<br>
+                  "Email": "twisted@gmail.com",<br>
+                  "Birthday": "1999-01-21",<br>
+                  "WatchList": [Array of FilmIDs]<br>}</p></td>
+              <td>A JSON object holding data about the user that was added in
+                addition to a generated user ID.
+                <p style="color: #770000">{<br>
+                  "_id": "5jshdy346lskdjg",
+                  "Username": "contortion",<br>
+                  "Password": "d0ubl3j0int3d",<br>
+                  "Email": "twisted@gmail.com",<br>
+                  "Birthday": "1999-01-21",<br>
+                  "WatchList": [Array of FilmIDs]<br>}</p></td>
+            </tr>
+            <tr>
+              <td>Allows new user to update their profile.</td>
+              <td>/users/[username]</td>
+              <td>PUT</td>
+              <td>A JSON object that holds data about the current user to be
+                update with new information.
+                <p style="color: #770000">{<br>
+                  "Username": "newusername",<br>
+                  "Password": "newpassword",<br>
+                  "Email": "newemail@gmail.com",<br>
+                  "Birthday": "1999-01-21",<br>}</p>
+              </td>
+              <td>A message indicating whether or not the user's profile has
+                been
+                successfully changed.</td>
+            </tr>
+            <tr>
+              <td>Allows user to add a movie to a queue.</td>
+              <td>/users/[username]/queue/[filmID]</td>
+              <td>POST</td>
+              <td>A JSON object holding data about the film to be added to the
+                user's queue.</td>
+              <td>A message indicating whether the film was added to the
+                user's queue.</td>
+            </tr>
+            <tr>
+              <td>Allows user to remove a movie from their queue.</td>
+              <td>/users/[username]/queue/[filmID]</td>
+              <td>DELETE</td>
+              <td>None</td>
+              <td>A text message indicating whether the film was successfully
+                removed from the user's queue.</td>
+            </tr>
+            <tr>
+              <td>Allow existing user to deregister.</td>
+              <td>/users/[username]</td>
+              <td>DELETE</td>
+              <td>None</td>
+              <td>A message indicated whether the user's account was
+                successfully removed from the site.</td>
+            </tr>
+          </tbody>
+        </table>
+      </container>
+      <p>TO BE UPDATED & STYLED AS APP AND FUNCTIONALITY ARE BUILT.</p>
+    </container>
+  </body>
+</html>
