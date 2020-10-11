@@ -1,40 +1,40 @@
-// const http = require("http"),
-//   fs = require("fs"),
-//   url = require("url");
+const http = require("http"),
+  fs = require("fs"),
+  url = require("url");
 
-// http
-//   .createServer((request, response) => {
-//     var addr = request.url,
-//       q = url.parse(addr, true),
-//       filePath = "";
+http
+  .createServer((request, response) => {
+    var addr = request.url,
+      q = url.parse(addr, true),
+      filePath = "";
 
-//     if (q.pathname.includes("documentation")) {
-//       filePath = __dirname + "/public/documentation.html";
-//     } else {
-//       filePath = "index.html";
-//     }
+    if (q.pathname.includes("documentation")) {
+      filePath = __dirname + "/public/documentation.html";
+    } else {
+      filePath = "index.html";
+    }
 
-//     fs.readFile(filePath, (err, data) => {
-//       if (err) {
-//         throw err;
-//       }
+    fs.readFile(filePath, (err, data) => {
+      if (err) {
+        throw err;
+      }
 
-//       fs.appendFile(
-//         "log.txt",
-//         "URL: " + addr + "\nTimestamp: " + new Date() + "\n\n",
-//         function (err) {
-//           if (err) {
-//           } else {
-//             console.log("Added to log.");
-//           }
-//         }
-//       );
+      fs.appendFile(
+        "log.txt",
+        "URL: " + addr + "\nTimestamp: " + new Date() + "\n\n",
+        function (err) {
+          if (err) {
+          } else {
+            console.log("Added to log.");
+          }
+        }
+      );
 
-//       response.writeHead(200, { "Content-Type": "text/html" });
-//       response.write(data);
-//       response.end();
-//     });
-//   })
-//   .listen(8080, function () {
-//     console.log("Server listening on 8080...");
-//   });
+      response.writeHead(200, { "Content-Type": "text/html" });
+      response.write(data);
+      response.end();
+    });
+  })
+  .listen(8080, function () {
+    console.log("Server listening on 8080...");
+  });

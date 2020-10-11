@@ -406,14 +406,14 @@ app.delete(
   }
 );
 
-// listen for requests on port 8080
-app.listen(8080, () => {
-  console.log("your app is listening on port 8080!");
-});
-
-// const port = process.env.PORT || 8080;
-// app.listen(port, '0.0.0.0', () => {
-//   console.log('Listening on Port ' + port);
+// // listen for requests on port 8080
+// app.listen(8080, () => {
+//   console.log("your app is listening on port 8080!");
 // });
+
+const port = process.env.PORT || 8080;
+app.listen(port, '0.0.0.0',() => {
+ console.log('Listening on Port ' + port);
+});
 
 // mongoimport --uri "mongodb+srv://fataleFlixUser:databaseUser%2A%21%2A@fataleflixdb.7g43t.gcp.mongodb.net/test" --collection Films --type json --file ../exported_collections/films.json
