@@ -327,8 +327,8 @@ app.delete(
     );
   }
 );
-const host = '0.0.0.0';
+
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0' () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
