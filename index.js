@@ -8,7 +8,7 @@ const express = require("express"),
   const app = express();
 
 //imports passport into index.js
-const passport = require("passport");
+const passport = require("passport")(passport);
 require("./passport");
 
 const { check, validationResult } = require("express-validator");
@@ -328,7 +328,8 @@ app.delete(
   }
 );
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, '0.0.0.0' () => {
-    console.log(`Our app is running on port ${ PORT }`);
-});
+// listen for requests
+const port = process.env.PORT || 8080
+app.listen(port, '0.0.0.0', () => {
+  console.log('Listening on Port ' + port)
+})
