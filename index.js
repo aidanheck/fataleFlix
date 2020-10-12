@@ -7,7 +7,7 @@ const express = require("express"),
   Models = require("./models.js");
   //imports auth.js into index.js
 let auth = require("./auth")(app);
-let allowedOrigins = ["http://127.0.0.0.1:8080"];
+let allowedOrigins = ["http://127.0.0.0.1:8080","https://fataleflix.herokuapp.com/"];
 
 //imports passport into index.js
 const passport = require("passport");
