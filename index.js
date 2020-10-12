@@ -20,7 +20,7 @@ const Users = Models.User
   let auth = require("./auth")(app);
   let allowedOrigins = [
   "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/"];
+  "https://fataleflix.herokuapp.com/*"];
 
 //MongoDB Atlas and Heroku connection
 mongoose.connect(process.env.CONNECTION_URI, { 
