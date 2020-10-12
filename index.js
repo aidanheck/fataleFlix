@@ -5,9 +5,7 @@ const express = require("express"),
   cors = require("cors"),
   mongoose = require("mongoose"),
   Models = require("./models.js");
-  //imports auth.js into index.js
-let auth = require("./auth")(app);
-let allowedOrigins = ["http://127.0.0.0.1:8080","https://fataleflix.herokuapp.com/"];
+  const app = express();
 
 //imports passport into index.js
 const passport = require("passport");
@@ -15,12 +13,19 @@ require("./passport");
 
 const { check, validationResult } = require("express-validator");
 
-const app = express();
 const Films = Models.Film
 const Users = Models.User
 
+  //imports auth.js into index.js
+  let auth = require("./auth")(app);
+  let allowedOrigins = [
+  "http://127.0.0.0.1:8080",
+  "https://fataleflix.herokuapp.com/"];
+
 //MongoDB Atlas and Heroku connection
-mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, { 
+  useNewUrlParser: true, 
+  useUnifiedTopology: true });
 
 // Middleware
 app.use(bodyParser.json());
