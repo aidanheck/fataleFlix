@@ -10,15 +10,17 @@ const Models = require("./models.js");
 const Films = Models.Film;
 const Users = Models.User;
 
-mongoose.connect('mongodb://localhost:27017/fataleFlix', { useNewUrlParser: true, useUnifiedTopology: true });
+// mongoose.connect('mongodb://localhost:27017/fataleflix', { useNewUrlParser: true, useUnifiedTopology: true });
 
-mongoose.connect(
-  "mongodb+srv://fataleFlixUser:GoblinPleaseLetMeIn@fataleflixdb.7g43t.gcp.mongodb.net/test?retryWrites=true&w=majority",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+// mongoose.connect(
+//   "mongodb+srv://fataleFlixUser:GoblinLetMeInPlease@fataleflixdb.7g43t.gcp.mongodb.net/fataleflix?retryWrites=true&w=majority",
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   }
+// );
+
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Middleware
 app.use(bodyParser.json());
