@@ -23,9 +23,10 @@ const Users = Models.User
   "https://fataleflix.herokuapp.com/*"];
 
 //MongoDB Atlas and Heroku connection
-mongoose.connect(process.env.CONNECTION_URI, { 
-  useNewUrlParser: true, 
-  useUnifiedTopology: true });
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
 
 // Middleware
 app.use(bodyParser.json());
@@ -327,7 +328,7 @@ app.delete(
   }
 );
 
-const port = process.env.PORT || 8080;
-app.listen(port,() => {
- console.log('Listening on Port ' + port);
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
 });
