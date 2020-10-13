@@ -8,7 +8,7 @@ const express = require("express"),
   const app = express();
 
 //imports passport into index.js
-const passport = require("passport")(passport);
+const passport = require("passport");
 require("./passport");
 
 const { check, validationResult } = require("express-validator");
@@ -16,22 +16,21 @@ const { check, validationResult } = require("express-validator");
 const Films = Models.Film
 const Users = Models.User
 
-  //imports auth.js into index.js
-  let auth = require("./auth")(app);
-  let allowedOrigins = [
+ //imports auth.js into index.js
+ let auth = require("./auth")(app);
+let allowedOrigins = [
   "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/*"];
+  "https://fataleflix.herokuapp.com/"];
 
 //MongoDB Atlas and Heroku connection
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+  useUnifiedTopology: true,});
 
 // Middleware
+app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(morgan("common"));
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -51,12 +50,11 @@ app.use(
     extended: true,
   })
 );
-app.use(express.static("public"));
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send("oops! something broke!" + "<p>" + "error: " + err);
 });
-
 
 // Get the main page
 app.get("/", (req, res) => {
@@ -83,7 +81,7 @@ app.get(
 
 // Get a film based on its title
 app.get(
-  "/films/:title",
+  "/films/:filmID",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
@@ -99,7 +97,7 @@ app.get(
 
 // Get a director by name
 app.get(
-  "/films/director/:name",
+  "/films/:director/:name",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ "Director.Name": req.params.Name })
