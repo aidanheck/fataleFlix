@@ -6,6 +6,7 @@ const express = require("express"),
   mongoose = require("mongoose"),
   Models = require("./models.js");
   const app = express();
+// require('dotenv').config();
 
 //imports passport into index.js
 const passport = require("passport");
@@ -21,6 +22,7 @@ const Users = Models.User
 let allowedOrigins = [
   "http://127.0.0.0.1:8080",
   "https://fataleflix.herokuapp.com/"];
+
 
 //MongoDB Atlas and Heroku connection
 mongoose.connect(process.env.CONNECTION_URI, {
