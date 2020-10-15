@@ -23,7 +23,7 @@ console.log(process.env)
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,});
-  
+
  //imports auth.js into index.js
  let auth = require("./auth")(app);
 let allowedOrigins = [
@@ -330,7 +330,8 @@ app.delete(
 );
 
 // listen for requests
+const host = '0.0.0.0';
 const port = process.env.PORT || 8080
-app.listen(port, '0.0.0.0', () => {
-  console.log('Listening on Port ' + port)
+app.listen(port, host, () => {
+  console.log('listening on port ' + port)
 })
