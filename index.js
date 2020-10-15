@@ -1,3 +1,4 @@
+require('dotenv').config({ debug: process.env.DEBUG })
 const express = require("express"),
   morgan = require("morgan"),
   bodyParser = require("body-parser"),
@@ -17,17 +18,17 @@ const { check, validationResult } = require("express-validator");
 const Films = Models.Film
 const Users = Models.User
 
+console.log(process.env)
+//MongoDB Atlas and Heroku connection
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,});
+  
  //imports auth.js into index.js
  let auth = require("./auth")(app);
 let allowedOrigins = [
   "http://127.0.0.0.1:8080",
   "https://fataleflix.herokuapp.com/"];
-
-
-//MongoDB Atlas and Heroku connection
-mongoose.connect(process.env.CONNECTION_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,});
 
 // Middleware
 app.use(express.static("public"));
