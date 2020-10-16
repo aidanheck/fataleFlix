@@ -12,10 +12,7 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines": {
-    "node": "12.18.3",
-    "npm": "6.14.8"
-  },
+
   "keywords": [],
   "author": "",
   "license": "ISC",
