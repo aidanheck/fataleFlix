@@ -1,26 +1,33 @@
+require('dotenv').config({ debug: process.env.DEBUG })
 const express = require("express"),
   morgan = require("morgan"),
   bodyParser = require("body-parser"),
-  uuid = require("uuid");
+  uuid = require("uuid"),
+  cors = require("cors"),
+  mongoose = require("mongoose"),
+  Models = require("./models.js");
+
+//imports passport into index.js
+const passport = require("passport");
+require("./passport");
+
 const { check, validationResult } = require("express-validator");
+
 const app = express();
-const mongoose = require("mongoose");
-const Models = require("./models.js");
+const Films = Models.Film
+const Users = Models.User
 
-const Films = Models.Film;
-const Users = Models.User;
+//MongoDB Atlas and Heroku connection
+console.log(process.env);
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,})
 
-mongoose.connect('mongodb://localhost:27017/fataleFlix', { useNewUrlParser: true, useUnifiedTopology: true });
-
-mongoose.connect(
-  "mongodb+srv://fataleFlixUser:GoblinPleaseLetMeIn@fataleflixdb.7g43t.gcp.mongodb.net/test?retryWrites=true&w=majority",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  }
-);
+ //imports auth.js into index.js
+ let auth = require("./auth")(app);
 
 // Middleware
+app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(morgan("common"));
 app.use(
@@ -28,23 +35,6 @@ app.use(
     extended: true,
   })
 );
-app.use(express.static("public"));
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send("oops! something broke!" + "<p>" + "error: " + err);
-});
-
-//imports auth.js into index.js
-let auth = require("./auth")(app);
-
-//imports passport into index.js
-const passport = require("passport");
-require("./passport");
-
-//CORS
-const cors = require("cors");
-let allowedOrigins = ["http://localhost:8080", "http://testsite.com"];
-
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -59,89 +49,22 @@ app.use(
     },
   })
 );
+
+let allowedOrigins = [
+  "http://127.0.0.0.1:8080",
+  "https://fataleflix.herokuapp.com/"];
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send("oops! something broke!" + "<p>" + "error: " + err);
+});
+
 // Get the main page
 app.get("/", (req, res) => {
   res.send(
-    "Welcome to FataleFlix, a resource for unsettling films mostly about women."
+    "<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>"
   );
 });
-// let films = [
-//   {
-//     id: 1,
-//     title: "Jennifer's Body",
-//     description:
-//       "When a demon takes possession of her, high-school hottie Jennifer (Megan Fox) turns a hungry eye on guys who never stood a chance with her before. While evil Jennifer satisfies her appetite for human flesh with the school's male population, her nerdy friend, Needy (Amanda Seyfried), learns what's happening and vows to put an end to the carnage.",
-//     genre: "Comedy/Horror",
-//     director: {
-//       name: "Karyn Kusama",
-//       birth_year: "1968",
-//       biography:
-//         "Karyn Kusama was born on March 21, 1968 in Brooklyn, New York, USA as Karyn K. Kusama. She is a director and producer, known for The Invitation (2015), Girlfight (2000) and Ã†on Flux (2005).",
-//     },
-//     released: "2009",
-//     poster: "",
-//   },
-//   {
-//     id: 2,
-//     title: "The Love Witch",
-//     description:
-//       "Elaine (Samantha Robinson), a beautiful young witch, is determined to find a man to love her. In her gothic Victorian apartment she makes spells and potions, then picks up men and seduces them. However, her spells work too well, and she ends up with a string of hapless victims. When she at last meets the man of her dreams, her desperation to be loved drives her to the brink of insanity and murder.",
-//     genre: "Comedy/Horror",
-//     director: {
-//       name: "Anna Biller",
-//       birth_year: "N/A",
-//       biography:
-//         "Anna Biller is an independent American filmmaker who has directed two feature films. Biller considers herself a feminist filmmaker and consciously explores feminist themes throughout her work, including exploring the female gaze in cinema.",
-//     },
-//     released: "2017",
-//     poster: "",
-//   },
-//   {
-//     id: 3,
-//     title: "Midsommar",
-//     description:
-//       "A couple travel to Sweden to visit their friend's rural hometown for its fabled midsummer festival, but what begins as an idyllic retreat quickly devolves into an increasingly violent and bizarre competition at the hands of a pagan cult.",
-//     genre: "Horror",
-//     director: {
-//       name: "Ari Aster",
-//       birth_year: "1986",
-//       biography:
-//         "Ari Aster is an American director and screenwriter known for Hereditary and Midsommar.",
-//     },
-//     released: "2019",
-//     poster: "",
-//   },
-//   {
-//     id: 4,
-//     title: "The Babadook",
-//     description:
-//       "A single mother, plagued by the violent death of her husband, battles with her son's fear of a monster lurking in the house, but soon discovers a sinister presence all around her.",
-//     genre: "Horror",
-//     director: {
-//       name: "Jennifer Kent",
-//       birth_year: "1969",
-//       biography:
-//         "Jennifer Kent is an Australian actress, writer and director, best known for her directorial debut, the horror film The Babadook. Her second film, The Nightingale, premiered at the 75th Venice International Film Festival and was released in the United States on August 2, 2019.",
-//     },
-//     released: "2014",
-//     poster: "",
-//   },
-//   {
-//     id: 5,
-//     title: "We Need to Talk About Kevin",
-//     description:
-//       "Eva Khatchadourian (Tilda Swinton) is a travel writer/publisher who gives up her beloved freedom and bohemian lifestyle to have a child with her husband, Franklin (John C. Reilly). Pregnancy does not seem to agree with Eva, but what's worse, when she does give birth to a baby boy named Kevin, she can't seem to bond with him. When Kevin grows from a fussy, demanding toddler (Rocky Duer) into a sociopathic teen (Ezra Miller), Eva is forced to deal with the aftermath of her son's horrific act.",
-//     genre: "Thriller/Drama",
-//     director: {
-//       name: "Lynne Ramsay",
-//       birth_year: "1969",
-//       biography:
-//         "Lynne Ramsay is a Scottish film director, writer, producer, and cinematographer best known for the feature films Ratcatcher, Morvern Callar, We Need to Talk About Kevin, and You Were Never Really Here.",
-//     },
-//     released: "2011",
-//     poster: "",
-//   },
-// ];
 
 // Get a list of ALL films in the API
 app.get(
@@ -156,8 +79,7 @@ app.get(
         console.error(err);
         res.status(500).send("Error " + err);
       });
-  }
-);
+    });
 
 // Get a film based on its title
 app.get(
@@ -177,7 +99,7 @@ app.get(
 
 // Get a director by name
 app.get(
-  "/films/director/:name",
+  "/films/directors/:name",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ "Director.Name": req.params.Name })
@@ -195,7 +117,7 @@ app.get(
 
 // Get a genre by name and description based on film title
 app.get(
-  "films/:genre/:name",
+  "films/genres/:name",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
@@ -406,14 +328,9 @@ app.delete(
   }
 );
 
-// // listen for requests on port 8080
-// app.listen(8080, () => {
-//   console.log("your app is listening on port 8080!");
-// });
-
+// listen for requests
+const host = '0.0.0.0';
 const port = process.env.PORT || 8080;
-app.listen(port, '0.0.0.0',() => {
- console.log('Listening on Port ' + port);
+app.listen(port, host, function() {
+  console.log('listening on port ' + port);
 });
-
-// mongoimport --uri "mongodb+srv://fataleFlixUser:databaseUser%2A%21%2A@fataleflixdb.7g43t.gcp.mongodb.net/test" --collection Films --type json --file ../exported_collections/films.json
