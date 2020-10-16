@@ -25,14 +25,16 @@ mongoose.connect(process.env.CONNECTION_URI, {
 
  //imports auth.js into index.js
  let auth = require("./auth")(app);
-let allowedOrigins = [
-  "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/"];
 
 // Middleware
 app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(morgan("common"));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -47,11 +49,10 @@ app.use(
     },
   })
 );
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+
+let allowedOrigins = [
+  "http://127.0.0.0.1:8080",
+  "https://fataleflix.herokuapp.com/"];
 
 app.use((err, req, res, next) => {
   console.error(err);
@@ -61,7 +62,7 @@ app.use((err, req, res, next) => {
 // Get the main page
 app.get("/", (req, res) => {
   res.send(
-    "Welcome to FataleFlix, a resource for unsettling films mostly about women."
+    "<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>"
   );
 });
 
@@ -78,12 +79,11 @@ app.get(
         console.error(err);
         res.status(500).send("Error " + err);
       });
-  }
-);
+    });
 
 // Get a film based on its title
 app.get(
-  "/films/:filmID",
+  "/films/:title",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
@@ -99,7 +99,7 @@ app.get(
 
 // Get a director by name
 app.get(
-  "/films/:director/:name",
+  "/films/directors/:name",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ "Director.Name": req.params.Name })
@@ -117,7 +117,7 @@ app.get(
 
 // Get a genre by name and description based on film title
 app.get(
-  "films/:genre/:name",
+  "films/genres/:name",
   passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
@@ -330,7 +330,7 @@ app.delete(
 
 // listen for requests
 const host = '0.0.0.0';
-const port = process.env.PORT || 8080
-app.listen(port, host, () => {
-  console.log('listening on port ' + port)
-})
+const port = process.env.PORT || 8080;
+app.listen(port, host, function() {
+  console.log('listening on port ' + port);
+});
