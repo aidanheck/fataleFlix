@@ -1,6 +1,10 @@
 {
   "name": "fataleflix",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.18.3",
+    "npm": "6.14.8"
+  },
   "description": "A simple app filled with unsettling woman-centered films.",
   "main": "index.js",
   "repository": {
