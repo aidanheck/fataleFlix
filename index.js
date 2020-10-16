@@ -6,8 +6,6 @@ const express = require("express"),
   cors = require("cors"),
   mongoose = require("mongoose"),
   Models = require("./models.js");
-  const app = express();
-// require('dotenv').config();
 
 //imports passport into index.js
 const passport = require("passport");
@@ -15,14 +13,15 @@ require("./passport");
 
 const { check, validationResult } = require("express-validator");
 
+const app = express();
 const Films = Models.Film
 const Users = Models.User
 
-console.log(process.env)
 //MongoDB Atlas and Heroku connection
+console.log(process.env);
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,});
+  useUnifiedTopology: true,})
 
  //imports auth.js into index.js
  let auth = require("./auth")(app);
