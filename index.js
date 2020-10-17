@@ -23,8 +23,6 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,})
 
- //imports auth.js into index.js
- let auth = require("./auth")(app);
 
 // Middleware
 app.use(express.static("public"));
@@ -35,6 +33,10 @@ app.use(
     extended: true,
   })
 );
+
+ //imports auth.js into index.js
+ let auth = require("./auth")(app);
+
 app.use(
   cors({
     origin: (origin, callback) => {
