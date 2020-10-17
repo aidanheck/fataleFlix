@@ -1,1 +1,1 @@
-web: ENV_SILENT=true npm startnpm uninstall pas
+web: node index.js
