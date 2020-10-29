@@ -1,7 +1,6 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
 
 import { MainView } from './components/main-view/main-view';
 
@@ -9,7 +8,7 @@ import { MainView } from './components/main-view/main-view';
 import './index.scss';
 
 //main component
-class fataleFlixApplication extends React.Component {
+class fataleFlixApp extends Component {
    render() {
         return <MainView/>;
    }
@@ -19,4 +18,4 @@ class fataleFlixApplication extends React.Component {
 const container = document.getElementsByClassName('app-container')[0];
 
 //tells react to render your app in the root DOM element
-ReactDOM.render(React.createElement(fataleFlixApplication), container);
+ReactDOM.render(React.createElement(fataleFlixApp), container);
