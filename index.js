@@ -37,6 +37,11 @@ app.use(
  //imports auth.js into index.js
  let auth = require("./auth")(app);
 
+ let allowedOrigins = [
+  "http://127.0.0.0.1:8080",
+  "https://fataleflix.herokuapp.com/",
+  "http://localhost:1234"];
+
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -51,10 +56,6 @@ app.use(
     },
   })
 );
-
-let allowedOrigins = [
-  "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/"];
 
 app.use((err, req, res, next) => {
   console.error(err);
@@ -71,7 +72,6 @@ app.get("/", (req, res) => {
 // Get a list of ALL films in the API
 app.get(
   "/films",
-  passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Films.find()
       .then((films) => {
