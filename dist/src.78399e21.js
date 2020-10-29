@@ -49638,8 +49638,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
-var _axios = _interopRequireDefault(require("axios"));
-
 var _mainView = require("./components/main-view/main-view");
 
 require("./index.scss");
@@ -49669,32 +49667,32 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 //main component
-var fataleFlixApplication = /*#__PURE__*/function (_React$Component) {
-  _inherits(fataleFlixApplication, _React$Component);
+var fataleFlixApp = /*#__PURE__*/function (_Component) {
+  _inherits(fataleFlixApp, _Component);
 
-  var _super = _createSuper(fataleFlixApplication);
+  var _super = _createSuper(fataleFlixApp);
 
-  function fataleFlixApplication() {
-    _classCallCheck(this, fataleFlixApplication);
+  function fataleFlixApp() {
+    _classCallCheck(this, fataleFlixApp);
 
     return _super.apply(this, arguments);
   }
 
-  _createClass(fataleFlixApplication, [{
+  _createClass(fataleFlixApp, [{
     key: "render",
     value: function render() {
       return _react.default.createElement(_mainView.MainView, null);
     }
   }]);
 
-  return fataleFlixApplication;
-}(_react.default.Component); //finds the root of your app
+  return fataleFlixApp;
+}(Component); //finds the root of your app
 
 
 var container = document.getElementsByClassName('app-container')[0]; //tells react to render your app in the root DOM element
 
-_reactDom.default.render(_react.default.createElement(fataleFlixApplication), container);
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","axios":"../node_modules/axios/index.js","./components/main-view/main-view":"components/main-view/main-view.jsx","./index.scss":"index.scss"}],"../../../../../../../.nvm/versions/node/v12.18.3/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+_reactDom.default.render(_react.default.createElement(fataleFlixApp), container);
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","./components/main-view/main-view":"components/main-view/main-view.jsx","./index.scss":"index.scss"}],"../../../../../../../.nvm/versions/node/v12.18.3/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -49722,7 +49720,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62950" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63594" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
