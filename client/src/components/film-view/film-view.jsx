@@ -31,7 +31,10 @@ export class FilmView extends React.Component {
                          <span className="label">Director: </span>
                          <span className="value">{film.Director.Name}</span>
                     </div>
+                    <a href="/" target="_blank"> 
+                    <button> go home </button></a>
                </div>
+               
           );
           }
      }

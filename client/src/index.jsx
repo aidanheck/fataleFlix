@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { MainView } from './components/main-view/main-view';
