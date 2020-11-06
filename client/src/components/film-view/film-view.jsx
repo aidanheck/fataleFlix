@@ -1,4 +1,6 @@
 import React from 'react';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 export class FilmView extends React.Component {
      
@@ -13,28 +15,20 @@ export class FilmView extends React.Component {
           if (!film) return null;
 
           return (
-               <div className="film-view">
-                    <img className="film-poster" src={film.ImagePath}/>
-                    <div className="film-title">
-                         <span className="label">Title: </span>
-                         <span className="value">{film.Title}</span>
-                    </div>
-                    <div className="film-description">
-                         <span className="label">Description: </span>
-                         <span className="value">{film.Description}</span>
-                    </div>
-                    <div className="film-genre">
-                         <span className="label">Genre: </span>
-                         <span className="value">{film.Genre.Name}</span>
-                    </div>
-                    <div className="film-director">
-                         <span className="label">Director: </span>
-                         <span className="value">{film.Director.Name}</span>
-                    </div>
-                    <a href="/"> 
-                    <button> go home </button></a>
+               <div>
+                    <Card style={{ width: '25rem' }}>
+                         <Card.Img variant="top" src={film.ImagePath}/>
+                         <Card.Body>
+                              <Card.Title>{film.Title}</Card.Title>
+                              <Card.Text>Description: {film.Description}</Card.Text>
+                              <Card.Text>Genre: {film.Genre}</Card.Text>
+                              <Card.Text>Director: {film.Director.name}</Card.Text>
+                               <Link to={'/'}>
+                                     <Button variant="outline-danger">go home</Button>
+                               </Link>
+                          </Card.Body>
+                  </Card>
                </div>
-               
           );
           }
      }

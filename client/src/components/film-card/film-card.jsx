@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import Axios from 'axios';
+import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
 export class FilmCard extends React.Component {
      render() {
@@ -7,8 +9,24 @@ export class FilmCard extends React.Component {
           const { film, onClick } = this.props;
 
           return (
-               <div onClick={() => onClick(film)} className="film-card">{film.Title}</div>
-
-          );
+               <Card style={{width: '20rem'}}>
+                    <Card.Img variant="top" src={film.ImagePath} />
+                    <Card.Body>
+                         <Card.Title>{film.Title}</Card.Title>
+                         <Card.Text>{film.Description}</Card.Text>
+               <Button variant="outline-danger" onClick={() => onClick(film)}>open</Button>
+               </Card.Body>
+               </Card>
+                    );   
+           }
      }
-}
+
+
+FilmCard.propTypes = {
+     film: PropTypes.shape({
+          Title: PropTypes.string,
+          Description: PropTypes.string.isRequired,
+          ImagePath: PropTypes.string.isRequired,
+        }).isRequired,
+     onClick: PropTypes.func.isRequired
+};
