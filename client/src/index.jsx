@@ -3,12 +3,14 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { MainView } from './components/main-view/main-view';
+// import { LoginView } from './components/login-view/login-view';
+// import { RegistrationView } from './components/registration-view/registration-view';
 
 //import statement to indicate that you need to bundle `./index.scss`
 import './index.scss';
 
 //main component
-class fataleFlixApp extends Component {
+class fataleFlixApp extends React.Component {
    render() {
         return <MainView/>;
    }
