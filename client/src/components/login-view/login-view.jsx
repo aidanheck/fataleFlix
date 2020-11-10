@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import '../login-view/login-view.scss';
 
 export function LoginView(props) {
      const [username, setUsername] = useState('');
      const [password, setPassword] = useState('');
 
      const handleSubmit = (e) => {
+
+          console.log(username, password);
           e.preventDefault();
           axios.post('https://fataleflix.herokuapp.com/login', {
                Username: username,

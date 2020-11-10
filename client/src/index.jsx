@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { MainView } from './components/main-view/main-view';
@@ -10,9 +10,9 @@ import { MainView } from './components/main-view/main-view';
 import './index.scss';
 
 //main component
-class fataleFlixApp extends React.Component {
+class FataleFlixApp extends React.Component {
    render() {
-        return <MainView/>;
+      return <MainView />;
    }
 }
 
@@ -20,4 +20,4 @@ class fataleFlixApp extends React.Component {
 const container = document.getElementsByClassName('app-container')[0];
 
 //tells react to render your app in the root DOM element
-ReactDOM.render(React.createElement(fataleFlixApp), container);
+ReactDOM.render(React.createElement(FataleFlixApp), container);

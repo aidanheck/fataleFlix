@@ -1,46 +1,39 @@
 require('dotenv').config({ debug: process.env.DEBUG })
-const express = require("express"),
-  morgan = require("morgan"),
-  bodyParser = require("body-parser"),
-  uuid = require("uuid"),
-  cors = require("cors"),
-  mongoose = require("mongoose"),
-  Models = require("./models.js");
+const express = require('express'),
+  morgan = require('morgan'),
+  bodyParser = require('body-parser'),
+  uuid = require('uuid'),
+  cors = require('cors'),
+  mongoose = require('mongoose'),
+  Models = require('./models.js');
 
-//imports passport into index.js
-const passport = require("passport");
-require("./passport");
+const { check, validationResult } = require('express-validator');
 
-const { check, validationResult } = require("express-validator");
+const Films = Models.Film;
+const Users = Models.User;
 
-const app = express();
-const Films = Models.Film
-const Users = Models.User
+let allowedOrigins = [
+    'http://127.0.0.0.1:8080',
+    'https://fataleflix.herokuapp.com/',
+    'http://localhost:1234'];
 
 //MongoDB Atlas and Heroku connection
 console.log(process.env);
 mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,})
+  useUnifiedTopology: true,});
 
+const app = express();
 
 // Middleware
-app.use(express.static("public"));
 app.use(bodyParser.json());
-app.use(morgan("common"));
+app.use(express.static('public'));
+app.use(morgan('common'))
 app.use(
   bodyParser.urlencoded({
     extended: true,
   })
 );
-
- //imports auth.js into index.js
- let auth = require("./auth")(app);
-
- let allowedOrigins = [
-  "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/",
-  "http://localhost:1234"];
 
 app.use(
   cors({
@@ -48,7 +41,7 @@ app.use(
       if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) === -1) {
         let message =
-          "the CORS policy for this application doesn't allow access from origin" +
+          'the CORS policy for this application does not allow access from origin' +
           origin;
         return callback(new Error(message), false);
       }
@@ -57,21 +50,23 @@ app.use(
   })
 );
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send("oops! something broke!" + "<p>" + "error: " + err);
-});
+ //imports auth.js into index.js
+let auth = require('./auth')(app);
+
+ //imports passport into index.js
+const passport = require('passport');
+require('./passport');
 
 // Get the main page
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(
-    "<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>"
+    '<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>'
   );
 });
 
 // Get a list of ALL films in the API
 app.get(
-  "/films",
+  '/films', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Films.find()
       .then((films) => {
@@ -79,14 +74,14 @@ app.get(
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error " + err);
+        res.status(500).send('Error ' + err);
       });
     });
 
 // Get a film based on its title
 app.get(
-  "/films/:title",
-  passport.authenticate("jwt", { sesson: false }),
+  '/films/:title',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
       .then((film) => {
@@ -94,80 +89,48 @@ app.get(
       })
       .catch((error) => {
         console.error(err);
-        res.status(500).send("Error: " + error);
-      });
-  }
-);
-
-// Get a director by name
-app.get(
-  "/films/directors/:name",
-  passport.authenticate("jwt", { sesson: false }),
-  (req, res) => {
-    Films.findOne({ "Director.Name": req.params.Name })
-      .then((films) => {
-        res.json(
-          "Name: " + films.Director.Name + " Bio: " + films.Director.Bio
-        );
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send('Error: ' + error);
       });
   }
 );
 
 // Get a genre by name and description based on film title
 app.get(
-  "films/genres/:name",
-  passport.authenticate("jwt", { sesson: false }),
+  'films/:genres/:name',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
       .then((film) => {
         res
           .status(201)
           .json(
-            "Genre " +
+            'Genre ' +
               film.Genre.Name +
-              "Description: " +
+              'Description: ' +
               film.Genre.Description
           );
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send('Error: ' + err);
       });
   }
 );
 
-//get all users
+// Get a director by name
 app.get(
-  "/users",
-  passport.authenticate("jwt", { sesson: false }),
+  '/films/directors/:Name',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Users.find()
-      .then((users) => {
-        res.status(201).json(users);
+    Films.findOne({ 'Director.Name': req.params.Name })
+      .then((films) => {
+        res.json(
+          'Name: ' + films.Director.Name + ' Bio: ' + films.Director.Bio
+        );
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error " + err);
-      });
-  }
-);
-
-// Get a user account by username
-app.get(
-  "/users/:Username",
-  passport.authenticate("jwt", { sesson: false }),
-  (req, res) => {
-    Users.findOne({ Username: req.params.Username })
-      .then((user) => {
-        res.json(user);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send('Error: ' + err);
       });
   }
 );
@@ -183,16 +146,16 @@ app.get(
 }
 */
 app.post(
-  "/users",
-  // passport.authenticate("jwt", { sesson: false }),
+  '/users',
+  // passport.authenticate('jwt', { sesson: false }),
   // [
-  //   check("Username", "Username is required").isLength({ min: 3 }),
+  //   check('Username', 'Username is required').isLength({ min: 3 }),
   //   check(
-  //     "Username",
-  //     "Username containse non alphanumeric characters - not allowed."
+  //     'Username',
+  //     'Username containse non alphanumeric characters - not allowed.'
   //   ).isAlphanumeric(),
-  //   check("Password", "Password is required").not().isEmpty(),
-  //   check("Email", "Email does not appear to be valid").isEmail(),
+  //   check('Password', 'Password is required').not().isEmpty(),
+  //   check('Email', 'Email does not appear to be valid').isEmail(),
   // ],
   (req, res) => {
     let errors = validationResult(req);
@@ -203,7 +166,7 @@ app.post(
     Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Username + " already exists");
+          return res.status(400).send(req.body.Username + ' already exists');
         } else {
           Users.create({
             Username: req.body.Username,
@@ -216,57 +179,96 @@ app.post(
             })
             .catch((error) => {
               console.error(error);
-              res.status(500).send("Error: " + error);
+              res.status(500).send('Error: ' + error);
             });
         }
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send("Error: " + error);
+        res.status(500).send('Error: ' + error);
+      });
+  }
+);
+
+//get all users
+app.get(
+  '/users',
+  passport.authenticate('jwt', { sesson: false }),
+  (req, res) => {
+    Users.find()
+      .then((users) => {
+        res.status(201).json(users);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error ' + err);
+      });
+  }
+);
+
+// Get a user account by username
+app.get(
+  '/users/:Username',
+  passport.authenticate('jwt', { sesson: false }),
+  (req, res) => {
+    Users.findOne({ Username: req.params.Username })
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error: ' + err);
       });
   }
 );
 
 // Delete a user account
 app.delete(
-  "/users/:Username",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
       .then((user) => {
         if (!user) {
-          res.status(400).send(req.params.Username + " was not found");
+          res.status(400).send(req.params.Username + ' was not found');
         } else {
-          res.status(201).send(req.params.Username + " was deleted");
+          res.status(201).send(req.params.Username + ' was deleted');
         }
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send('Error: ' + err);
       });
   }
 );
 
 // Update a user account by username
 app.put(
-  "/users/:Username",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username',
   [
-    check("Username", "Username is required").isLength({ min: 3 }),
+    check('Username', 'Username is required').isLength({ min: 3 }),
     check(
-      "Username",
-      "Username containse non alphanumeric characters - not allowed."
+      'Username',
+      'Username contains non alphanumeric characters - not allowed.'
     ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
-    check("Email", "Email does not appear to be valid").isEmail(),
-  ],
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail(),
+  ], passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
+    let errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
+
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
@@ -275,7 +277,7 @@ app.put(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send('Error: ' + err);
         } else {
           res.json(updatedUser);
         }
@@ -284,21 +286,21 @@ app.put(
   }
 );
 
-// Add a film to "watch" list by film ID
+// Add a film to 'watch' list by film ID
 app.post(
-  "/users/:Username/Films/:FilmID",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username/Films/:FilmID',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
-        $push: { WatchList: req.params.FilmID },
+        $push: { Queue: req.params.FilmID },
       },
       { new: true },
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send('Error: ' + err);
         } else {
           res.json(updatedUser);
         }
@@ -307,21 +309,21 @@ app.post(
   }
 );
 
-// Remove a film from "watch" list by film ID
+// Remove a film from 'watch' list by film ID
 app.delete(
-  "/users/:Username/Films/:FilmID",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username/Films/:FilmID',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndRemove(
       { Username: req.params.Username },
       {
-        $pull: { WatchList: req.params.FilmID },
+        $pull: { Queue: req.params.FilmID },
       },
       { new: true },
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send('Error: ' + err);
         } else {
           res.json(updatedUser);
         }
@@ -329,6 +331,12 @@ app.delete(
     );
   }
 );
+
+//returns error message
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('oops! something broke!' + '<p>' + 'error: ' + err);
+});
 
 // listen for requests
 const host = '0.0.0.0';

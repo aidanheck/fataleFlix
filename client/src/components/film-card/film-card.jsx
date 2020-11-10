@@ -9,17 +9,17 @@ export class FilmCard extends React.Component {
           const { film, onClick } = this.props;
 
           return (
-               <Card style={{width: '20rem'}}>
+               <Card style={{ width: '20rem' }}>
                     <Card.Img variant="top" src={film.ImagePath} />
                     <Card.Body>
                          <Card.Title>{film.Title}</Card.Title>
                          <Card.Text>{film.Description}</Card.Text>
-               <Button variant="outline-danger" onClick={() => onClick(film)}>open</Button>
-               </Card.Body>
+                         <Button variant="outline-danger" onClick={() => onClick(film)}>open</Button>
+                    </Card.Body>
                </Card>
-                    );   
-           }
+          );
      }
+}
 
 
 FilmCard.propTypes = {
@@ -27,6 +27,6 @@ FilmCard.propTypes = {
           Title: PropTypes.string,
           Description: PropTypes.string.isRequired,
           ImagePath: PropTypes.string.isRequired,
-        }).isRequired,
+     }).isRequired,
      onClick: PropTypes.func.isRequired
 };
