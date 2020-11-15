@@ -1,5 +1,15 @@
 import React from 'react';
-import Axios from 'axios';
+import axios from 'axios';
+
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import { LoginView } from '../login-view/login-view';
+import { RegistrationView } from '../registration-view/registration-view';
+import { FilmView } from '../film-view/film-view';
+import { FilmCard } from '../film-card/film-card';
+import { DirectorView } from '../director-view/director-view';
+import { GenreView } from '../genre-view/genre-view';
+import { ProfileView } from '../profile-view/profile-view';
 
 import { Container } from 'react-bootstrap/Container';
 import { Button } from 'react-bootstrap/Button';
@@ -7,11 +17,6 @@ import { Form } from 'react-bootstrap/Form';
 import { FormControl } from 'react-bootstrap/FormControl';
 import { Navbar } from 'react-bootstrap/Navbar';
 import { Nav } from 'react-bootstrap/Nav';
-
-import { LoginView } from '../login-view/login-view';
-import { FilmView } from '../film-view/film-view';
-import { FilmCard } from '../film-card/film-card';
-import { RegistrationView } from '../registration-view/registration-view';
 
 import '/index.scss';
 
@@ -21,30 +26,20 @@ export class MainView extends React.Component {
           super();
 
           this.state = {
-               films: null,
-               selectedFilm: null,
-               user: null,
+               films: [],
+               user: null
           };
      }
 
      // One of the "hooks" available in a React Component
      componentDidMount() {
-          Axios
-               .get("https://fataleflix.herokuapp.com/films")
-               .then((response) => {
-                    // Assign the result to the state
-                    this.setState({
-                         films: response.data,
-                    });
-               })
-               .catch(function (error) {
-                    console.log(error);
+          let accessToken = localStorage.getItem('token');
+          if (accessToken !== null) {
+               this.setState({
+                    user: localStorage.getItem('user')
                });
-     }
-     onFilmClick(film) {
-          this.setState({
-               selectedFilm: film
-          });
+               this.getFilms(accessToken);
+          }
      }
 
      onLoggedIn(authData) {
@@ -58,23 +53,31 @@ export class MainView extends React.Component {
           this.getFilms(authData.token);
      }
 
+     onLoggedOut() {
+          this.setState({
+               user: null
+          });
+
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+     }
+
      getFilms(token) {
-          Axios.get('https://fataleflix.herokuapp.com/films', {
-               headers: { Authorization: 'Bearer' }
+          axios.get('https://fataleflix.herokuapp.com/films', {
+               headers: { Authorization: `Bearer ${token}` },
           })
      }
 
      render() {
-          const { films, selectedFilm, user } = this.state;
+          const { films, user } = this.state;
 
-          if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
-
+          if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
           //before the films have been loaded
           if (!films) return <div className="main-view" />;
 
           return (
-               <Container>
-                    <div className="main-view">
+               <Router>
+                    <Container>
                          <Navbar bg="dark" variant="dark" expand="lg">
                               <Navbar.Brand href="/">fataleFlix</Navbar.Brand>
                               <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -91,22 +94,37 @@ export class MainView extends React.Component {
                                    </Form>
                               </Navbar.Collapse>
                          </Navbar>
+
                          <div className="main-view">
-                              <Container fluid="sm">
-                                   {selectedFilm
-                                        ? <FilmView film={selectedFilm} />
-                                        : films.map(film => (
-                                             <FilmCard key={film._id} film={film} onClick={film => this.onFilmClick(film)} />
-                                        ))
-                                   }
-                              </Container>
+                              <Route path="/" render={() => {
+                                   if (!user) return (<LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />);
+                                   return films.map((f) => <FilmCard key={f._id} film={f} />);
+                              }}
+                              />
+
+                              <Route path="/register" render={() => <RegistrationView />} />
+
+                              <Route exact path="films/:filmId" render={({ match }) => (<FilmView film={films.find((f) => f._id === match.params.filmID)} />)} />
+
+                              <Route path="/films/genres/:name" render={({ match }) => {
+                                   if (!films) return <div className="main-view" />;
+                                   return (
+                                        <GenreView
+                                             genre={
+                                                  films.find((f) => f.Genre.Name === match.params.name).Genre
+                                             } />
+                                   );
+                              }}
+                              />
+
+                              <Route path="/films/directors/:name" render={({ match }) => <DirectorView director={films.find((f) => f.Director.Name === match.params.name).Director} />
+                              } />
+
+                              <Route path="/user" render={() => <ProfileView films={films} />}
+                              />
                          </div>
-                    </div>
-               </Container>
+                    </Container>
+               </Router>
           );
      }
 }
-
-// let mapStateToProps = (state) => {
-//      return { films: state.films };
-// };

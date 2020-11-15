@@ -35815,15 +35815,22 @@ var MainView = /*#__PURE__*/function (_React$Component) {
   _createClass(MainView, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var accessToken = localStorage.getItem('token');
 
-      _axios.default.get("https://fataleflix.herokuapp.com/films").then(function (response) {
-        // Assign the result to the state
-        _this2.setState({
-          films: response.data
+      if (accessToken !== null) {
+        this.setState({
+          user: localStorage.getItem('user')
         });
-      }).catch(function (error) {
-        console.log(error);
+        this.getFilms(accessToken);
+      }
+    }
+  }, {
+    key: "getFilms",
+    value: function getFilms(token) {
+      _axios.default.get('https://fataleflix.herokuapp.com/films', {
+        headers: {
+          Authorization: "Bearer ".concat(token)
+        }
       });
     }
   }, {
@@ -35845,18 +35852,9 @@ var MainView = /*#__PURE__*/function (_React$Component) {
       this.getFilms(authData.token);
     }
   }, {
-    key: "getFilms",
-    value: function getFilms(token) {
-      _axios.default.get('https://fataleflix.herokuapp.com/films', {
-        headers: {
-          Authorization: 'Bearer'
-        }
-      });
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       var _this$state = this.state,
           films = _this$state.films,
@@ -35864,7 +35862,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           user = _this$state.user;
       if (!user) return _react.default.createElement(_loginView.LoginView, {
         onLoggedIn: function onLoggedIn(user) {
-          return _this3.onLoggedIn(user);
+          return _this2.onLoggedIn(user);
         }
       }); //before the films have been loaded
 
@@ -35895,7 +35893,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
         size: "sm",
         variant: "outline-danger",
         onclick: function onclick() {
-          return _this3.onLoggedOut();
+          return _this2.onLoggedOut();
         }
       })), _react.default.createElement(_Form.Form, {
         inline: true
@@ -35916,7 +35914,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           key: film._id,
           film: film,
           onClick: function onClick(film) {
-            return _this3.onFilmClick(film);
+            return _this2.onFilmClick(film);
           }
         });
       })))));
@@ -36019,7 +36017,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54455" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57294" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

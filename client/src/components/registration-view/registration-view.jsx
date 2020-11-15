@@ -23,18 +23,20 @@ export function RegistrationView() {
                Birthday: birthday,
           };
 
-          // axios
-          //      .post('https://fataleflix.herokuapp.com/users', createdUser)
-          //      .then((response) => {
-          //           console.log(response);
-          //           console.log(response.data);
-          //           alert('Registered!');
-          //           window.open('/client', '_self');
-          //      })
-          //      .catch((e) => {
-          //           console.log(e.response);
-          //           alert('there was an error.');
-          //      });
+          axios
+               .post('https://fataleflix.herokuapp.com/users', createdUser)
+               .then((response) => {
+                    const data = response.data;
+                    console.log(data);
+                    // console.log(response);
+                    // console.log(response.data);
+                    // alert('Registered!');
+                    window.open('/', '_self');
+               })
+               .catch((e) => {
+                    console.log(e.response);
+                    alert('error registering the user');
+               });
      };
      return (
           <Container>
