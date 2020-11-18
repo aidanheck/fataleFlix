@@ -11,14 +11,17 @@ import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import { ProfileView } from '../profile-view/profile-view';
 
-import { Container } from 'react-bootstrap/Container';
-import { Button } from 'react-bootstrap/Button';
-import { Form } from 'react-bootstrap/Form';
-import { FormControl } from 'react-bootstrap/FormControl';
-import { Navbar } from 'react-bootstrap/Navbar';
-import { Nav } from 'react-bootstrap/Nav';
+import Container from 'react-bootstrap/Container';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import FormControl from 'react-bootstrap/FormControl';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+
+import { Link } from 'react-router-dom';
 
 import '/index.scss';
+
 
 export class MainView extends React.Component {
 
@@ -66,6 +69,9 @@ export class MainView extends React.Component {
           axios.get('https://fataleflix.herokuapp.com/films', {
                headers: { Authorization: `Bearer ${token}` },
           })
+               .catch(function (err) {
+                    console.log(err);
+               });
      }
 
      render() {
@@ -78,15 +84,16 @@ export class MainView extends React.Component {
           return (
                <Router>
                     <Container>
-                         <Navbar bg="dark" variant="dark" expand="lg">
+                         <Navbar className="navbar-style" bg="dark" variant="dark" expand="lg">
                               <Navbar.Brand href="/">fataleFlix</Navbar.Brand>
                               <Navbar.Toggle aria-controls="basic-navbar-nav" />
                               <Navbar.Collapse id="basic-navbar-nav">
                                    <Nav className="mr-auto">
                                         <Nav.Link href="/">home</Nav.Link>
-                                        <Nav.Link href="/login">login</Nav.Link>
+                                        <Nav.Link as={Link} to='/user'>profile</Nav.Link>
                                         <Nav.Link href="/register">register</Nav.Link>
-                                        <Button size="sm" variant="outline-danger" onclick={() => this.onLoggedOut()}></Button>
+                                        <Nav.Link href="/login">login</Nav.Link>
+                                        <Nav.Link onClick={() => this.onLoggedOut()}>logout</Nav.Link>
                                    </Nav>
                                    <Form inline>
                                         <FormControl type="text" placeholder="search for a film!" className="mr-sm-2" />
