@@ -36405,7 +36405,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       var film = this.props.film;
       q.preventDefault();
 
-      _axios.default.post("https://fataleflix.herokuapp.com/update-user/".concat(localStorage.getItem('user'), "/films/").concat(film._id), {
+      _axios.default.post("https://fataleflix.herokuapp.com/update-user/".concat(localStorage.getItem('user'), "/queue/").concat(film._id), {
         username: localStorage.getItem('user')
       }, {
         headers: {
@@ -36979,6 +36979,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _reactRouterDom = require("react-router-dom");
+
 require("./profile-view.scss");
 
 var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
@@ -36990,8 +36992,6 @@ var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
 var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
 
 var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
-
-var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37067,67 +37067,75 @@ var ProfileView = /*#__PURE__*/function (_React$Component) {
       }).catch(function (err) {
         console.log(err);
       });
-    }
-  }, {
-    key: "deleteQueueItem",
-    value: function deleteQueueItem(filmID) {
-      console.log(this.props.films);
+    } // deleteQueueItem(filmID) {
+    //      console.log(this.props.films);
+    //      axios
+    //           .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/queue/${filmID}`,
+    //                {
+    //                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    //                }
+    //           )
+    //           .then(res => {
+    //                alert('removed item from queue');
+    //           })
+    //           .catch(err => {
+    //                alert('error removing item' + err);
+    //           });
+    // }
+    // deleteUser() {
+    //      axios
+    //           .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}`,
+    //                {
+    //                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    //                }
+    //           )
+    //           .then(res => {
+    //                localStorage.removeItem('token');
+    //                localStorage.removeItem('user');
+    //                this.setState({
+    //                     user: null
+    //                })
+    //                window.open('/client/login', '_self');
+    //           })
+    //           .catch(error => {
+    //                alert('there was an error - your account could not be deleted' + error);
+    //           })
+    // }
+    // onLoggedOut(user) {
+    //      localStorage.removeItem('token', 'user');
+    //      this.setState({
+    //           user: null
+    //      })
+    //      window.open('/client/login', '_self');
+    // };
+    // goBack() {
+    //      history.back();
+    //      window.scroll(0.0);
+    // }
 
-      _axios.default.delete("https://fataleflix.herokuapp.com/users/".concat(localStorage.getItem('user'), "/Films/").concat(filmID), {
-        headers: {
-          Authorization: "Bearer ".concat(localStorage.getItem('token'))
-        }
-      }).then(function (res) {
-        alert('removed item from queue');
-      }).catch(function (err) {
-        alert('error removing item' + err);
-      });
-    }
-  }, {
-    key: "deleteUser",
-    value: function deleteUser(e) {
-      _axios.default.delete("https://fataleflix.herokuapp.com/users/".concat(localStorage.getItem('user')), {
-        headers: {
-          Authorization: "Bearer ".concat(localStorage.getItem('token'))
-        }
-      }).then(function (res) {
-        alert('this account has been deleted.');
-        localStorage.removeItem('token', 'user');
-        window.open('/');
-      }).catch(function (event) {
-        alert('this account has not been delete.');
-      });
-    }
   }, {
     key: "render",
     value: function render() {
       var _this3 = this;
 
       var films = this.props.films;
-      var QueueList = films.filter(function (film) {
-        return _this3.state.Queue.includes(film._id);
-      });
-      return _react.default.createElement(_Container.default, null, _react.default.createElement("div", {
+      console.log(this.props); // const QueueList = films.filter(film =>
+      //      user.QueueList.includes(film._id));
+
+      return _react.default.createElement(_Container.default, {
+        fluid: true
+      }, _react.default.createElement("div", {
         className: "profile-view"
       }, _react.default.createElement(_Card.default, {
         style: {
           width: '25rem'
         }
-      }, _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Text, null, "Username: ", this.state.Username, " "), _react.default.createElement(_Card.default.Text, null, " Email: ", this.state.Email, " "), _react.default.createElement(_Card.default.Text, null, "Birthday: ", this.state.Birthday, " "), "Queue: ", QueueList.map(function (film) {
-        return _react.default.createElement("div", {
-          key: film._id,
-          className: "queued-films-button"
-        }, _react.default.createElement(_reactRouterDom.Link, {
-          to: "/films/".concat(film._id)
-        }, _react.default.createElement(_Button.default, {
-          variant: "outline-danger"
-        }, film.Title)), _react.default.createElement(_Button.default, {
-          variant: "outline-danger",
-          onClick: function onClick(e) {
-            return _this3.deleteQueueItem(film._id);
-          }
-        }, "remove from queue"));
-      }), _react.default.createElement(_reactRouterDom.Link, {
+      }, _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Text, null, "Username: ", this.state.Username, " "), _react.default.createElement(_Card.default.Text, null, " Email: ", this.state.Email, " "), _react.default.createElement(_Card.default.Text, null, "Birthday: ", this.state.Birthday, " "), _react.default.createElement(_Button.default, {
+        variant: "outline-danger",
+        onClick: function onClick() {
+          return _this3.deleteUser();
+        }
+      }, "delete user"), _react.default.createElement(_reactRouterDom.Link, {
         to: '/'
       }, _react.default.createElement(_Button.default, {
         variant: "outline-danger"
@@ -37139,7 +37147,7 @@ var ProfileView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.ProfileView = ProfileView;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./profile-view.scss":"components/profile-view/profile-view.scss","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js"}],"../node_modules/invariant/browser.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","./profile-view.scss":"components/profile-view/profile-view.scss","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js"}],"../node_modules/invariant/browser.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -40099,7 +40107,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61337" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52676" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

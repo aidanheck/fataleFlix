@@ -26,7 +26,7 @@ export class FilmView extends React.Component {
      addUserQueue(q) {
           const { film } = this.props;
           q.preventDefault();
-          axios.post(`https://fataleflix.herokuapp.com/update-user/${localStorage.getItem('user')}/films/${film._id}`, {
+          axios.post(`https://fataleflix.herokuapp.com/update-user/${localStorage.getItem('user')}/queue/${film._id}`, {
                username: localStorage.getItem('user')
           },
                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
