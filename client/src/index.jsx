@@ -1,18 +1,26 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
-import { MainView } from './components/main-view/main-view';
+import MainView from './components/main-view/main-view';
+import filmsApp from './reducers/reducers';
 // import { LoginView } from './components/login-view/login-view';
 // import { RegistrationView } from './components/registration-view/registration-view';
 
 //import statement to indicate that you need to bundle `./index.scss`
 import './index.scss';
 
+const store = createStore(filmsApp);
+
 //main component
 class FataleFlixApp extends React.Component {
    render() {
-      return <MainView />;
+      return (
+         <Provider store={store}>
+            <MainView />
+         </Provider>);
    }
 }
 

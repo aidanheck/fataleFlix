@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
@@ -19,14 +20,13 @@ export class FilmCard extends React.Component {
           // }
           if (film) {
                return (
-
-                    <Card className="film-card" style={{ width: '20rem' }}>
+                    <Card className="film-card" style={{ width: '25rem' }}>
                          <Card.Img variant="top" src={film.ImagePath} />
                          <Card.Body>
                               <Card.Title>{film.Title}</Card.Title>
                               <Card.Text>{film.Description}</Card.Text>
                               <Link to={`/films/${film._id}`}>
-                                   <Button variant="outline-danger" >open</Button>
+                                   <Button variant="outline-danger">open</Button>
                               </Link>
                          </Card.Body>
                     </Card>

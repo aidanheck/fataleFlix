@@ -1,3 +1,14 @@
+.film-card {
+  color: #222222;
+  padding: 10px;
+  margin: 2%;
+}
+.filmslist-container {
+  max-width: 80%;
+}
+.film-card {
+  color: #222222;
+}
 body {
   background-color: #222222;
   color: #f0eaea;
@@ -7,13 +18,18 @@ body {
   margin: auto;
   padding-top: 15%;
 }
-.film-card {
+.profile-view {
+  padding-left: 2%;
+  padding-top: 2%;
   color: #222222;
+  position: relative;
 }
-.film-card {
-  color: #222222;
-  padding: 10px;
-  margin: 2%;
+
+.profile-button {
+  margin-left: 5px;
+  width: 100%;
+  margin-right: 5px;
+  margin: auto;
 }
 .navbar-style {
   width: 100%;

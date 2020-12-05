@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -7,48 +7,75 @@ import './profile-view.scss';
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 export class ProfileView extends React.Component {
 
      constructor() {
           super();
           this.state = {
-               username: null,
-               password: null,
-               email: null,
-               birthday: null,
-               queue: [],
+               Username: null,
+               Password: null,
+               Email: null,
+               Birthday: null,
+               Queue: [],
                films: []
           };
      }
 
-     componentDidMount() {
-          const accessToken = localStorage.getItem('token');
-          this.getUser(accessToken);
-     }
-
      getUser(token) {
           const username = localStorage.getItem('user');
-
           axios
                .get(`https://fataleflix.herokuapp.com/users/${username}`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { Authorization: `Bearer ${token}` }
                })
 
-               .then((res) => {
+               .then(res => {
                     this.setState({
                          Username: res.data.Username,
                          Password: res.data.Password,
                          Email: res.data.Email,
                          Birthday: res.data.Birthday,
-                         Queue: res.data.Queue,
+                         Queue: res.data.Queue
                     });
                })
-               .catch(function (err) {
-                    console.log(err);
+               .catch(function (error) {
+                    console.log(error);
                });
+     }
+
+     onLoggedOut() {
+          localStorage.removeItem('token', 'user');
+          // this.setState({
+          //      user: null
+          // })
+          window.open('/', '_self');
+     };
+
+     componentDidMount() {
+          const accessToken = localStorage.getItem('token');
+          if (accessToken !== null) {
+               this.getUser(accessToken);
+          }
+     }
+
+     deleteUser() {
+          axios
+               .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}`,
+                    {
+                         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                    }
+               )
+               .then(res => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    this.setState({
+                         user: nullheroku
+                    })
+                    window.open('/client/login', '_self');
+               })
+               .catch(error => {
+                    alert('there was an error - your account could not be deleted' + error);
+               })
      }
 
      // deleteQueueItem(filmID) {
@@ -67,68 +94,45 @@ export class ProfileView extends React.Component {
      //           });
      // }
 
-     // deleteUser() {
-     //      axios
-     //           .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}`,
-     //                {
-     //                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-     //                }
-     //           )
-     //           .then(res => {
-     //                localStorage.removeItem('token');
-     //                localStorage.removeItem('user');
-     //                this.setState({
-     //                     user: null
-     //                })
-     //                window.open('/client/login', '_self');
-     //           })
-     //           .catch(error => {
-     //                alert('there was an error - your account could not be deleted' + error);
-     //           })
-     // }
-
-     // onLoggedOut(user) {
-     //      localStorage.removeItem('token', 'user');
-     //      this.setState({
-     //           user: null
-     //      })
-     //      window.open('/client/login', '_self');
-     // };
-
      // goBack() {
      //      history.back();
      //      window.scroll(0.0);
      // }
 
      render() {
+          const { Queue, Username, Email, Birthday } = this.state;
           const { films } = this.props;
-          console.log(this.props);
-          // const QueueList = films.filter(film =>
-          //      user.QueueList.includes(film._id));
+          const userQueue = this.state.Queue;
+          const QueuedFilms = films.filter((film) => userQueue.includes(film._id));
 
           return (
                <Container fluid>
                     <div className="profile-view">
-                         <Card style={{ width: '25rem' }}>
+                         <Card style={{ width: '50%' }}>
                               <Card.Body>
-                                   <Card.Text>Username: {this.state.Username} </Card.Text>
-                                   <Card.Text> Email: {this.state.Email} </Card.Text>
-                                   <Card.Text>Birthday: {this.state.Birthday} </Card.Text>
-                                   {/* Queue: {queueList.map((film) => (
+                                   <Card.Text>Username: {Username} </Card.Text>
+                                   <Card.Text> Email: {Email} </Card.Text>
+                                   <Card.Text>Birthday: {Birthday} </Card.Text>
+                                   Queue: {QueuedFilms.map(film => (
                                         <div key={film._id} className='queued-films-button'>
                                              <Link to={`/films/${film._id}`}>
                                                   <Button variant="outline-danger">{film.Title}</Button>
                                              </Link>
                                              <Button variant="outline-danger" onClick={(e) => this.deleteQueueItem(film._id)}>remove from queue</Button></div>
-                                   ))} */}
-                                   <Button variant="outline-danger" onClick={() => this.deleteUser()}>delete user</Button>
-                                   <Link to={'/'}>
-                                        <Button variant="outline-danger">back</Button>
-                                   </Link>
+                                   ))}<br></br>
+                                   <br></br>
+                                   <div className="profile-button" >
+                                        <Button block variant="outline-danger" onClick={() => this.deleteUser()}>delete user</Button>
+                                        <Link to={'/'}>
+                                             <Button block variant="outline-danger">back</Button>
+                                        </Link>
+                                   </div>
                               </Card.Body>
                          </Card>
                     </div>
-               </Container >
+               </Container>
           );
      }
-}
+};
+
+export default ProfileView;

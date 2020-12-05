@@ -1,13 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
+
+import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-import { LoginView } from '../login-view/login-view';
-import { RegistrationView } from '../registration-view/registration-view';
+import { setFilms } from '../../actions/actions';
+
+import FilmsList from '../films-list/films-list';
 import { FilmView } from '../film-view/film-view';
 import { FilmCard } from '../film-card/film-card';
+import { LoginView } from '../login-view/login-view';
+import { RegistrationView } from '../registration-view/registration-view';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import { ProfileView } from '../profile-view/profile-view';
@@ -29,7 +33,6 @@ export class MainView extends React.Component {
           super();
 
           this.state = {
-               films: [],
                user: null
           };
      }
@@ -45,8 +48,18 @@ export class MainView extends React.Component {
           }
      }
 
+     getFilms(token) {
+          axios.get('https://fataleflix.herokuapp.com/films', {
+               headers: { Authorization: `Bearer ${token}` }
+          }).then(response => {
+               this.props.setFilms(response.data);
+          })
+               .catch(function (err) {
+                    console.log(err);
+               });
+     }
+
      onLoggedIn(authData) {
-          console.log(authData);
           this.setState({
                user: authData.user.Username
           });
@@ -65,25 +78,13 @@ export class MainView extends React.Component {
           localStorage.removeItem('user');
      }
 
-     getFilms(token) {
-          axios.get('https://fataleflix.herokuapp.com/films', {
-               headers: { Authorization: `Bearer ${token}` },
-          }).then((response) => {
-               this.setState({
-                    films: response.data
-               });
-          })
-               .catch(function (err) {
-                    console.log(err);
-               });
-     }
-
      render() {
-          const { films, user } = this.state;
+          let { films } = this.props;
+          let { user } = this.state;
 
-          if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
-          //before the films have been loaded
-          if (!films) return <div className="main-view" />;
+          // if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
+          // //before the films have been loaded
+          // if (!films) return <div className="main-view" />;
 
           return (
                <Router>
@@ -93,7 +94,7 @@ export class MainView extends React.Component {
                          <Navbar.Collapse id="basic-navbar-nav">
                               <Nav className="mr-auto">
                                    <Nav.Link href="/">home</Nav.Link>
-                                   <Nav.Link as={Link} to='/user'>profile</Nav.Link>
+                                   <Nav.Link as={Link} to='/users/:Username'>profile</Nav.Link>
                                    <Nav.Link href="/register">register</Nav.Link>
                                    <Nav.Link href="/login">login</Nav.Link>
                                    <Nav.Link onClick={() => this.onLoggedOut()}>logout</Nav.Link>
@@ -107,11 +108,10 @@ export class MainView extends React.Component {
                     <Container fluid>
                          <div className="main-view">
                               <Row className="main-container">
-                                   <Route path="/" render={() => {
-                                        if (!user) return (<LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />);
-                                        return films.map((f) => <FilmCard key={f._id} film={f} />);
-                                   }}
-                                   />
+                                   <Route exact path="/" render={() => {
+                                        if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+                                        return <FilmsList films={films} />;
+                                   }} />
 
                                    <Route path="/register" render={() => <RegistrationView />} />
 
@@ -131,7 +131,7 @@ export class MainView extends React.Component {
                                    <Route path="/films/directors/:name" render={({ match }) => <DirectorView director={films.find((f) => f.Director.Name === match.params.name).Director} />
                                    } />
 
-                                   <Route path="/user" render={() => <ProfileView films={films} />}
+                                   <Route path="/users/:Username" render={() => <ProfileView films={films} />}
                                    />
                               </Row>
                          </div>
@@ -140,23 +140,9 @@ export class MainView extends React.Component {
           );
      }
 }
-MainView.propTypes = {
 
-     films: PropTypes.arrayOf(
-          PropTypes.shape({
-               Title: PropTypes.string,
-               ImageUrl: PropTypes.string,
-               Description: PropTypes.string,
-               Genre: PropTypes.exact({
-                    _id: PropTypes.string,
-                    Name: PropTypes.string,
-                    Description: PropTypes.string
-               }),
-               Director: PropTypes.shape({
-                    Name: PropTypes.string
-               }),
-               ImagePath: PropTypes.string,
-               Featured: PropTypes.bool,
-          })
-     )
-};
+let mapStateToProps = state => {
+     return { films: state.films }
+}
+
+export default connect(mapStateToProps, { setFilms })(MainView);
