@@ -24,10 +24,17 @@ export class ProfileView extends React.Component {
 
      getUser(token) {
           const username = localStorage.getItem('user');
-          axios
-               .get(`https://fataleflix.herokuapp.com/users/${username}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-               })
+          axios({
+               method: 'get',
+               url: `https://fataleflix.herokuapp.com/users/${username}`,
+               headers: {
+                    Authorization: `Bearer ${token}`,
+                    data: {},
+               }
+          })
+               // .get(`https://fataleflix.herokuapp.com/users/${username}`, {
+               //      headers: { Authorization: `Bearer ${token}` }
+               // })
 
                .then(res => {
                     this.setState({

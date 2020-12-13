@@ -39581,12 +39581,17 @@ var ProfileView = /*#__PURE__*/function (_React$Component) {
       var _this2 = this;
 
       var username = localStorage.getItem('user');
-
-      _axios.default.get("https://fataleflix.herokuapp.com/users/".concat(username), {
+      (0, _axios.default)({
+        method: 'get',
+        url: "https://fataleflix.herokuapp.com/users/".concat(username),
         headers: {
-          Authorization: "Bearer ".concat(token)
+          Authorization: "Bearer ".concat(token),
+          data: {}
         }
-      }).then(function (res) {
+      }) // .get(`https://fataleflix.herokuapp.com/users/${username}`, {
+      //      headers: { Authorization: `Bearer ${token}` }
+      // })
+      .then(function (res) {
         _this2.setState({
           Username: res.data.Username,
           Password: res.data.Password,
@@ -42745,7 +42750,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55505" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49656" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

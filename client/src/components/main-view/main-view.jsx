@@ -38,11 +38,12 @@ export class MainView extends React.Component {
      }
 
      // One of the "hooks" available in a React Component
+
      componentDidMount() {
           let accessToken = localStorage.getItem('token');
           if (accessToken !== null) {
                this.setState({
-                    user: localStorage.getItem('user')
+                    user: localStorage.getItem('user'),
                });
                this.getFilms(accessToken);
           }
@@ -58,6 +59,7 @@ export class MainView extends React.Component {
                     console.log(err);
                });
      }
+
 
      onLoggedIn(authData) {
           this.setState({
