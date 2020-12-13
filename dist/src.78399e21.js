@@ -39005,7 +39005,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
 
       var film = this.props.film;
       if (!film) return _react.default.createElement("div", {
-        "class": "main-view"
+        className: "main-view"
       });
       return _react.default.createElement(Container, null, _react.default.createElement(_Row.default, {
         className: "film-view-container"
@@ -42750,7 +42750,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49656" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53076" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

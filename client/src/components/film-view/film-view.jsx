@@ -37,7 +37,7 @@ export class FilmView extends React.Component {
      render() {
           const { film } = this.props;
 
-          if (!film) return <div class="main-view" />;
+          if (!film) return <div className="main-view" />;
 
           return (
                <Container>
