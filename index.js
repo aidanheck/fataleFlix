@@ -85,7 +85,7 @@ app.get(
   '/films/:title',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Films.findOne({ Title: req.params.Title })
+    Films.find({ Title: req.params.Title })
       .then((film) => {
         res.json(film);
       })
@@ -101,7 +101,7 @@ app.get(
   'films/:genres/:name',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Films.findOne({ Title: req.params.Title })
+    Films.find({ Title: req.params.Title })
       .then((film) => {
         res
           .status(201)
@@ -165,7 +165,7 @@ app.post(
       return res.status(422).json({ errors: errors.array() });
     }
     let hashedPassword = Users.hashPassword(req.body.Password);
-    Users.findOne({ Username: req.body.Username })
+    Users.find({ Username: req.body.Username })
       .then((user) => {
         if (user) {
           return res.status(400).send(req.body.Username + ' already exists');
