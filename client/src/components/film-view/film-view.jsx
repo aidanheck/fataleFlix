@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import './film-view.scss';
 
+import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -62,17 +63,19 @@ export class FilmView extends React.Component {
                                    </div>
                                    <div className="film-genre">
                                         <span className="label">Genre:&nbsp;</span>
-                                        <Link to={`/genres/${film.Genre.Name}`}>
+                                        <Link to={`/films/genres/${film.Genre.Name}`}>
                                              <span className="value-link">{film.Genre.Name}</span>
                                         </Link>
                                    </div>
                                    <div className="film-director">
                                         <span className="label">Director:&nbsp;</span>
-                                        <Link to={`/directors/${film.Director.Name}`}>
+                                        <Link to={`/films/directors/${film.Director.Name}`}>
                                              <span className="value-link">{film.Director.Name}</span>
                                         </Link>
                                    </div>
-                                   <Button variant="outline-danger" className="btn back-button" onClick={this.goHome.bind(this)}>back</Button>
+                                   <Link to='/'>
+                                        <Button variant="outline-danger" className="btn back-button">back</Button>
+                                   </Link>
                               </div>
                          </Col>
                     </Row>
@@ -93,7 +96,7 @@ FilmView.propTypes = {
           }),
           Director: PropTypes.shape({
                Name: PropTypes.string,
-               Bio: PropTypes
+               Bio: PropTypes.string
           }),
           ImagePath: PropTypes.string,
           Queue: PropTypes.bool,

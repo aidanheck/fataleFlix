@@ -38929,6 +38929,8 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 require("./film-view.scss");
 
+var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
+
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 
 var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
@@ -39007,7 +39009,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       if (!film) return _react.default.createElement("div", {
         className: "main-view"
       });
-      return _react.default.createElement(Container, null, _react.default.createElement(_Row.default, {
+      return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, {
         className: "film-view-container"
       }, _react.default.createElement(_Col.default, {
         lg: 4
@@ -39042,7 +39044,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       }, _react.default.createElement("span", {
         className: "label"
       }, "Genre:\xA0"), _react.default.createElement(_reactRouterDom.Link, {
-        to: "/genres/".concat(film.Genre.Name)
+        to: "/films/genres/".concat(film.Genre.Name)
       }, _react.default.createElement("span", {
         className: "value-link"
       }, film.Genre.Name))), _react.default.createElement("div", {
@@ -39050,14 +39052,15 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       }, _react.default.createElement("span", {
         className: "label"
       }, "Director:\xA0"), _react.default.createElement(_reactRouterDom.Link, {
-        to: "/directors/".concat(film.Director.Name)
+        to: "/films/directors/".concat(film.Director.Name)
       }, _react.default.createElement("span", {
         className: "value-link"
-      }, film.Director.Name))), _react.default.createElement(_Button.default, {
+      }, film.Director.Name))), _react.default.createElement(_reactRouterDom.Link, {
+        to: "/"
+      }, _react.default.createElement(_Button.default, {
         variant: "outline-danger",
-        className: "btn back-button",
-        onClick: this.goHome.bind(this)
-      }, "back")))));
+        className: "btn back-button"
+      }, "back"))))));
     }
   }]);
 
@@ -39077,11 +39080,11 @@ FilmView.propTypes = {
     }),
     Director: _propTypes.default.shape({
       Name: _propTypes.default.string,
-      Bio: _propTypes.default
+      Bio: _propTypes.default.string
     })
   }, _defineProperty(_PropTypes$shape, "ImagePath", _propTypes.default.string), _defineProperty(_PropTypes$shape, "Queue", _propTypes.default.bool), _PropTypes$shape))
 };
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","prop-types":"../node_modules/prop-types/index.js","./film-view.scss":"components/film-view/film-view.scss","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js"}],"components/login-view/login-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","prop-types":"../node_modules/prop-types/index.js","./film-view.scss":"components/film-view/film-view.scss","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js"}],"components/login-view/login-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -39420,6 +39423,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
+var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
+
 var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
@@ -39476,7 +39481,7 @@ var GenreView = /*#__PURE__*/function (_React$Component) {
       if (!genre) return _react.default.createElement("div", {
         className: "main-view"
       });
-      return _react.default.createElement(Container, null, _react.default.createElement("div", {
+      return _react.default.createElement(_Container.default, null, _react.default.createElement("div", {
         className: "genre-view"
       }, _react.default.createElement(_Card.default, {
         style: {
@@ -39498,7 +39503,7 @@ var GenreView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GenreView = GenreView;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","./genre-view.scss":"components/genre-view/genre-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","./genre-view.scss":"components/genre-view/genre-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -42521,7 +42526,7 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           var match = _ref.match;
           return _react.default.createElement(_filmView.FilmView, {
             film: films.find(function (f) {
-              return f._id === match.params.filmID;
+              return f._id === match.params.filmId;
             })
           });
         }
@@ -42750,7 +42755,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50416" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51400" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
