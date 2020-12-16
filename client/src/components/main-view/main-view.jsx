@@ -80,6 +80,7 @@ export class MainView extends React.Component {
           localStorage.removeItem('user');
      }
 
+
      render() {
           let { films } = this.props;
           let { user } = this.state;
@@ -125,7 +126,10 @@ export class MainView extends React.Component {
                                              <GenreView
                                                   genre={
                                                        films.find((f) => f.Genre.Name === match.params.name).Genre
-                                                  } />
+                                                  }
+                                                  otherFilms={films.filter(
+                                                       (f) => f.Genre.Name === match.params.name
+                                                  )} />
                                         );
                                    }}
                                    />

@@ -42540,7 +42540,10 @@ var MainView = /*#__PURE__*/function (_React$Component) {
           return _react.default.createElement(_genreView.GenreView, {
             genre: films.find(function (f) {
               return f.Genre.Name === match.params.name;
-            }).Genre
+            }).Genre,
+            otherFilms: films.filter(function (f) {
+              return f.Genre.Name === match.params.name;
+            })
           });
         }
       }), _react.default.createElement(_reactRouterDom.Route, {
@@ -42755,7 +42758,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51400" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55418" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
