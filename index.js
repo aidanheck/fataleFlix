@@ -98,7 +98,7 @@ app.get(
 
 // Get a genre by name and description based on film title
 app.get(
-  'films/:genres/:name',
+  '/films/:genres/:name',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Films.find({ Title: req.params.Title })

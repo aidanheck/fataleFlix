@@ -38987,7 +38987,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       var film = this.props.film;
       queue.preventDefault();
 
-      _axios.default.post("https://fataleflix.herokuapp.com/users/".concat(localStorage.getItem('user'), "/Films/").concat(film._id), {
+      _axios.default.post("https://fataleflix.herokuapp.com/users/".concat(localStorage.getItem('user'), "/films/").concat(film._id), {
         username: localStorage.getItem('user')
       }, {
         headers: {
@@ -42758,7 +42758,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55418" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62014" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -21,7 +21,7 @@ export class FilmView extends React.Component {
           const token = localStorage.getItem('token');
           const { film } = this.props;
           queue.preventDefault();
-          axios.post(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/Films/${film._id}`, {
+          axios.post(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/films/${film._id}`, {
                username: localStorage.getItem('user')
           },
                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, }
