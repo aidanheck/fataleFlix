@@ -1,6 +1,5 @@
 require('dotenv').config({ debug: process.env.DEBUG })
 const express = require('express'),
-  passport = require('passport');
   morgan = require('morgan'),
   bodyParser = require('body-parser'),
   uuid = require('uuid'),
@@ -29,7 +28,6 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use(passport.initialize());
 app.use(morgan('common'))
 app.use(
   bodyParser.urlencoded({
