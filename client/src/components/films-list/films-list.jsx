@@ -20,15 +20,19 @@ function FilmsList(props) {
      let filteredFilms = films;
 
      if (visibilityFilter !== '') {
-          filteredFilms = films.filter(f => f.Title.includes(visibilityFilter.toLowerCase()));
+          filteredFilms = films.filter(f => f.Title.includes(visibilityFilter));
      }
 
      if (!films) return <div className="main-view" />;
 
      return <div className="films-list"><VisibilityFilterInput visibilityFilter={visibilityFilter} />
-          {filteredFilms.map(f => <Col md={3}><FilmCard key={f._id} film={f} /></Col>)}
+          <Row>
+               <Col>
+                    {filteredFilms.map(f => <Col md={3}><FilmCard key={f._id} film={f} /></Col>)}
+               </Col>
+          </Row>
+
      </div >;
 }
 
 export default connect(mapStateToProps)(FilmsList);
-
