@@ -1,3 +1,25 @@
+.film-view-container {
+     padding-top: 10%;
+}
+
 .film-card {
-     color: #222222;
+     color: #333333;
+}
+
+.film-poster {
+     width: 350px;
+     border: 3px solid rgba(255, 0, 0, 0.5);
+     box-shadow: inset;
+}
+
+.film-block {
+     align-items: left;
+     padding-left: 25%;
+}
+
+.film-title {
+     font-size: 1.5em;
+     font-weight: 400;
+     font-style: italic;
+     padding-bottom: 1%;
 }

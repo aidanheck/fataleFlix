@@ -43,17 +43,13 @@ export class FilmView extends React.Component {
           return (
                <Container>
                     <Row className="film-view-container" >
-                         <Col lg={4}>
+                         <Col lg={3}>
                               <div className="film-view">
                                    <img className="film-poster" src={film.ImagePath} />
                               </div>
-                              <div>
-                                   <Button onClick={() => this.addUserQueue(film)}
-                                        variant="outline-danger">add film to queue</Button>
-                                   <Link to={'/'}><Button variant="outline-danger">home</Button></Link>
-                              </div>
+
                          </Col>
-                         <Col lg={4}>
+                         <Col lg={{ span: 6, offset: 1 }}>
                               <div className="film-block">
                                    <div className="film-title">
                                         <span className="value">{film.Title}</span>
@@ -72,6 +68,10 @@ export class FilmView extends React.Component {
                                         <Link to={`/films/directors/${film.Director.Name}`}>
                                              <span className="value-link">{film.Director.Name}</span>
                                         </Link>
+                                   </div>
+                                   <div>
+                                        <Button onClick={() => this.addUserQueue(film)}
+                                             variant="outline-danger">add film to queue</Button>
                                    </div>
                                    <Link to='/'>
                                         <Button variant="outline-danger" className="btn back-button">back</Button>
