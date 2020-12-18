@@ -26,11 +26,13 @@ function FilmsList(props) {
      if (!films) return <div className="main-view" />;
 
      return <div className="films-list"><VisibilityFilterInput visibilityFilter={visibilityFilter} />
-          <Row>
-               <Col>
-                    {filteredFilms.map(f => <Col md={3}><FilmCard key={f._id} film={f} /></Col>)}
-               </Col>
-          </Row>
+          <Container className="filmslist-container">
+               <Row>
+                    <Col>
+                         {filteredFilms.map(f => <FilmCard key={f._id} film={f} />)}
+                    </Col>
+               </Row>
+          </Container>
 
      </div >;
 }

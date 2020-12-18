@@ -38895,14 +38895,14 @@ function FilmsList(props) {
     className: "films-list"
   }, _react.default.createElement(_visibilityFilterInput.default, {
     visibilityFilter: visibilityFilter
-  }), _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, filteredFilms.map(function (f) {
-    return _react.default.createElement(_Col.default, {
-      md: 3
-    }, _react.default.createElement(_filmCard.FilmCard, {
+  }), _react.default.createElement(_Container.default, {
+    className: "filmslist-container"
+  }, _react.default.createElement(_Row.default, null, _react.default.createElement(_Col.default, null, filteredFilms.map(function (f) {
+    return _react.default.createElement(_filmCard.FilmCard, {
       key: f._id,
       film: f
-    }));
-  }))));
+    });
+  })))));
 }
 
 var _default = (0, _reactRedux.connect)(mapStateToProps)(FilmsList);
@@ -42759,7 +42759,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57069" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57939" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

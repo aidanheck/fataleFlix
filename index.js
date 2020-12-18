@@ -7,6 +7,10 @@ const express = require('express'),
   mongoose = require('mongoose'),
   Models = require('./models.js');
 
+  //imports passport into index.js
+const passport = require('passport');
+require('./passport');
+
 const { check, validationResult } = require('express-validator');
 
 const Films = Models.Film;
@@ -52,10 +56,6 @@ app.use(
 
  //imports auth.js into index.js
 let auth = require('./auth')(app);
-
- //imports passport into index.js
-const passport = require('passport');
-require('./passport');
 
 // Get the main page
 app.get('/', (req, res) => {
