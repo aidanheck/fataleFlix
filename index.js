@@ -1,4 +1,4 @@
-require('dotenv').config({ debug: process.env.DEBUG })
+require('dotenv').config({ debug: process.env.DEBUG });
 const express = require('express'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
@@ -22,17 +22,17 @@ passport.deserializeUser(function (id, done) {
 
 require('./passport');
 
-app.user(passport.initialize());
+app.use(passport.initialize());
 
 const { check, validationResult } = require('express-validator');
+
+const cors = require('cors');
+app.use(cors());
 
 let allowedOrigins = [
   'http://127.0.0.0.1:8080',
   'https://fataleflix.herokuapp.com/',
   'http://localhost:1234'];
-
-  const cors = require('cors');
-  app.use(cors());
 
 //MongoDB Atlas and Heroku connection
 console.log(process.env);
@@ -102,7 +102,7 @@ app.get(
   '/films/:title',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Films.find({ Title: req.params.Title })
+    Films.findOne({ Title: req.params.Title })
       .then((film) => {
         res.json(film);
       })
@@ -118,7 +118,7 @@ app.get(
   '/films/:genres/:name',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Films.find({ Title: req.params.Title })
+    Films.findOne({ Title: req.params.Title })
       .then((film) => {
         res
           .status(201)
