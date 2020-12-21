@@ -26,14 +26,13 @@ app.user(passport.initialize());
 
 const { check, validationResult } = require('express-validator');
 
-const uuid = require('uuid');
-const cors = require('cors');
-app.use(cors());
-
 let allowedOrigins = [
   'http://127.0.0.0.1:8080',
   'https://fataleflix.herokuapp.com/',
   'http://localhost:1234'];
+
+  const cors = require('cors');
+  app.use(cors());
 
 //MongoDB Atlas and Heroku connection
 console.log(process.env);
