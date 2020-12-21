@@ -33,7 +33,7 @@ export class MainView extends React.Component {
           super();
 
           this.state = {
-               user: null
+               user: null,
           };
      }
 
@@ -51,10 +51,11 @@ export class MainView extends React.Component {
 
      getFilms(token) {
           axios.get('https://fataleflix.herokuapp.com/films', {
-               headers: { Authorization: `Bearer ${token}` }
-          }).then(response => {
-               this.props.setFilms(response.data);
+               headers: { Authorization: `Bearer ${token}` },
           })
+               .then(response => {
+                    this.props.setFilms(response.data);
+               })
                .catch(function (err) {
                     console.log(err);
                });
@@ -112,7 +113,7 @@ export class MainView extends React.Component {
                          <div className="main-view">
                               <Row className="main-container">
                                    <Route exact path="/" render={() => {
-                                        if (!user) return <LoginView onLoggedIn={user => this.onLoggedIn(user)} />;
+                                        if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
                                         return <FilmsList films={films} />;
                                    }} />
 
@@ -134,9 +135,8 @@ export class MainView extends React.Component {
                                    }}
                                    />
 
-                                   <Route path="/films/directors/:name" render={({ match }) => <DirectorView director={films.find((f) => f.Director.Name === match.params.name).Director} />
+                                   <Route path="/films/directors/:name" render={({ match }) => <DirectorView director={films.find((f) => f.Director.Name === match.params.name)} />
                                    } />
-
                                    <Route path="/users/:Username" render={() => <ProfileView films={films} />}
                                    />
                               </Row>
@@ -147,8 +147,8 @@ export class MainView extends React.Component {
      }
 }
 
-let mapStateToProps = state => {
-     return { films: state.films }
+let mapStateToProps = (state) => {
+     return { films: state.films };
 }
 
 export default connect(mapStateToProps, { setFilms })(MainView);

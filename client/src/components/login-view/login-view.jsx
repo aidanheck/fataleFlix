@@ -17,7 +17,7 @@ export function LoginView(props) {
           e.preventDefault();
           axios.post('https://fataleflix.herokuapp.com/login', {
                Username: username,
-               Password: password
+               Password: password,
           })
                .then((response) => {
                     const data = response.data;
@@ -35,12 +35,20 @@ export function LoginView(props) {
                <Form>
                     <Form.Group controlId="formBasicUsername">
                          <Form.Label>username: </Form.Label>
-                         <Form.Control type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="enter username" />
+                         <Form.Control
+                              type="text"
+                              value={username}
+                              onChange={e => setUsername(e.target.value)}
+                              placeholder="enter username" />
                     </Form.Group>
 
                     <Form.Group controlId="formBasicPassword">
                          <Form.Label>password: </Form.Label>
-                         <Form.Control type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="enter password" />
+                         <Form.Control
+                              type="password"
+                              value={password}
+                              onChange={e => setPassword(e.target.value)}
+                              placeholder="enter password" />
                     </Form.Group>
 
                     <Button variant="outline-danger" size="sm" block onClick={handleSubmit}>sign in</Button>

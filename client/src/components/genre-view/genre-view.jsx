@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
 
 import './genre-view.scss';
 
@@ -41,6 +41,6 @@ export class GenreView extends React.Component {
                          </Card>
                     </div>
                </Container>
-          )
+          );
      }
 }

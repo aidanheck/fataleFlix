@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import './director-view.scss';
 
 export class DirectorView extends React.Component {
-
      constructor() {
           super();
           this.state = {};
@@ -25,8 +24,8 @@ export class DirectorView extends React.Component {
                     <div className="director-view">
                          <Card style={{ width: '50rem' }}>
                               <Card.Body>
-                                   <Card.Title>{director.Name}</Card.Title>
-                                   <Card.Text>Bio: {director.Bio}</Card.Text>
+                                   <Card.Title>{director.Director.Name}</Card.Title>
+                                   <Card.Text>Bio: {director.Director.ButtonBio}</Card.Text>
                               </Card.Body>
                               <Link to={"/"}>
                                    <Button variant="outline-danger">back</Button>
@@ -34,6 +33,6 @@ export class DirectorView extends React.Component {
                          </Card>
                     </div>
                </Container>
-          )
+          );
      }
 }

@@ -19,12 +19,12 @@ export class FilmView extends React.Component {
 
      addUserQueue(queue) {
           const token = localStorage.getItem('token');
+          const user = localStorage.getItem('user');
           const { film } = this.props;
-          queue.preventDefault();
-          axios.post(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/films/${film._id}`, {
-               username: localStorage.getItem('user')
+
+          axios.post(`https://fataleflix.herokuapp.com/users/${user}/films/${film._id}`, {
           },
-               { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }, }
+               { headers: { Authorization: `Bearer ${token}` }, }
           )
                .then((res) => {
                     console.log(res);
@@ -43,7 +43,7 @@ export class FilmView extends React.Component {
           return (
                <Container>
                     <Row className="film-view-container" >
-                         <Col lg={3}>
+                         <Col lg={4}>
                               <div className="film-view">
                                    <img className="film-poster" src={film.ImagePath} />
                               </div>

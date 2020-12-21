@@ -9,7 +9,6 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 export class ProfileView extends React.Component {
-
      constructor() {
           super();
           this.state = {
@@ -18,7 +17,7 @@ export class ProfileView extends React.Component {
                Email: null,
                Birthday: null,
                Queue: [],
-               films: []
+               films: [],
           };
      }
 
@@ -36,7 +35,7 @@ export class ProfileView extends React.Component {
                //      headers: { Authorization: `Bearer ${token}` }
                // })
 
-               .then(res => {
+               .then((res) => {
                     this.setState({
                          Username: res.data.Username,
                          Password: res.data.Password,
@@ -56,7 +55,7 @@ export class ProfileView extends React.Component {
           //      user: null
           // })
           window.open('/', '_self');
-     };
+     }
 
      componentDidMount() {
           const accessToken = localStorage.getItem('token');
@@ -67,20 +66,23 @@ export class ProfileView extends React.Component {
 
      deleteUser() {
           axios
-               .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}`,
+               .delete(
+                    `https://fataleflix.herokuapp.com/users/${localStorage.getItem(
+                         'user'
+                    )}`,
                     {
-                         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
                     }
                )
-               .then(res => {
+               .then((res) => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('user');
                     this.setState({
-                         user: nullheroku
-                    })
+                         user: nullheroku,
+                    });
                     window.open('/client/login', '_self');
                })
-               .catch(error => {
+               .catch((error) => {
                     alert('there was an error - your account could not be deleted' + error);
                });
      }
@@ -120,19 +122,34 @@ export class ProfileView extends React.Component {
                                    <Card.Text>Username: {Username} </Card.Text>
                                    <Card.Text> Email: {Email} </Card.Text>
                                    <Card.Text>Birthday: {Birthday} </Card.Text>
-                                   Queue: {' '}
-                                   {QueuedFilms.map(film => (
-                                        <div key={film._id} className='queued-films-button'>
+              Queue:{' '}
+                                   {QueuedFilms.map((film) => (
+                                        <div key={film._id} className="queued-films-button">
                                              <Link to={`/films/${film._id}`}>
                                                   <Button variant="outline-danger">{film.Title}</Button>
                                              </Link>
-                                             <Button variant="outline-danger" onClick={(e) => this.deleteQueueItem(film._id)}>remove from queue</Button></div>
-                                   ))}<br></br>
+                                             <Button
+                                                  variant="outline-danger"
+                                                  onClick={(e) => this.deleteQueueItem(film._id)}
+                                             >
+                                                  remove from queue
+                  </Button>
+                                        </div>
+                                   ))}
                                    <br></br>
-                                   <div className="profile-button" >
-                                        <Button block variant="outline-danger" onClick={() => this.deleteUser()}>delete user</Button>
+                                   <br></br>
+                                   <div className="profile-button">
+                                        <Button
+                                             block
+                                             variant="outline-danger"
+                                             onClick={() => this.deleteUser()}
+                                        >
+                                             delete user
+                </Button>
                                         <Link to={'/'}>
-                                             <Button block variant="outline-danger">back</Button>
+                                             <Button block variant="outline-danger">
+                                                  back
+                  </Button>
                                         </Link>
                                    </div>
                               </Card.Body>
@@ -141,6 +158,6 @@ export class ProfileView extends React.Component {
                </Container>
           );
      }
-};
+}
 
 export default ProfileView;

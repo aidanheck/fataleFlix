@@ -38986,14 +38986,12 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
     key: "addUserQueue",
     value: function addUserQueue(queue) {
       var token = localStorage.getItem('token');
+      var user = localStorage.getItem('user');
       var film = this.props.film;
-      queue.preventDefault();
 
-      _axios.default.post("https://fataleflix.herokuapp.com/users/".concat(localStorage.getItem('user'), "/films/").concat(film._id), {
-        username: localStorage.getItem('user')
-      }, {
+      _axios.default.post("https://fataleflix.herokuapp.com/users/".concat(user, "/films/").concat(film._id), {}, {
         headers: {
-          Authorization: "Bearer ".concat(localStorage.getItem('token'))
+          Authorization: "Bearer ".concat(token)
         }
       }).then(function (res) {
         console.log(res);
@@ -39014,7 +39012,7 @@ var FilmView = /*#__PURE__*/function (_React$Component) {
       return _react.default.createElement(_Container.default, null, _react.default.createElement(_Row.default, {
         className: "film-view-container"
       }, _react.default.createElement(_Col.default, {
-        lg: 3
+        lg: 4
       }, _react.default.createElement("div", {
         className: "film-view"
       }, _react.default.createElement("img", {
@@ -39395,7 +39393,7 @@ var DirectorView = /*#__PURE__*/function (_React$Component) {
         style: {
           width: '50rem'
         }
-      }, _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, null, director.Name), _react.default.createElement(_Card.default.Text, null, "Bio: ", director.Bio)), _react.default.createElement(_reactRouterDom.Link, {
+      }, _react.default.createElement(_Card.default.Body, null, _react.default.createElement(_Card.default.Title, null, director.Director.Name), _react.default.createElement(_Card.default.Text, null, "Bio: ", director.Director.ButtonBio)), _react.default.createElement(_reactRouterDom.Link, {
         to: "/"
       }, _react.default.createElement(_Button.default, {
         variant: "outline-danger"
@@ -39424,8 +39422,6 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactRouterDom = require("react-router-dom");
 
-var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
-
 var _Card = _interopRequireDefault(require("react-bootstrap/Card"));
 
 var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
@@ -39433,6 +39429,8 @@ var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
 var _Row = _interopRequireDefault(require("react-bootstrap/Row"));
 
 var _Col = _interopRequireDefault(require("react-bootstrap/Col"));
+
+var _Container = _interopRequireDefault(require("react-bootstrap/Container"));
 
 require("./genre-view.scss");
 
@@ -39504,7 +39502,7 @@ var GenreView = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GenreView = GenreView;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","./genre-view.scss":"components/genre-view/genre-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/esm/react-router-dom.js","react-bootstrap/Card":"../node_modules/react-bootstrap/esm/Card.js","react-bootstrap/Button":"../node_modules/react-bootstrap/esm/Button.js","react-bootstrap/Row":"../node_modules/react-bootstrap/esm/Row.js","react-bootstrap/Col":"../node_modules/react-bootstrap/esm/Col.js","react-bootstrap/Container":"../node_modules/react-bootstrap/esm/Container.js","./genre-view.scss":"components/genre-view/genre-view.scss"}],"components/profile-view/profile-view.scss":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -42759,7 +42757,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51195" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52719" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
