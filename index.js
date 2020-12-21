@@ -1,25 +1,39 @@
 require('dotenv').config({ debug: process.env.DEBUG })
 const express = require('express'),
-  morgan = require('morgan'),
   bodyParser = require('body-parser'),
-  uuid = require('uuid'),
-  cors = require('cors'),
   mongoose = require('mongoose'),
   Models = require('./models.js');
+  morgan = require('morgan');
 
-  //imports passport into index.js
-const passport = require('passport');
-require('./passport');
-
-const { check, validationResult } = require('express-validator');
-
+const app = express();
 const Films = Models.Film;
 const Users = Models.User;
 
+  //imports passport into index.js
+const passport = require('passport');
+passport.serializeUser(function (user, done) {
+  done(null, user.id);
+});
+passport.deserializeUser(function (id, done) {
+  User.findByID(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+require('./passport');
+
+app.user(passport.initialize());
+
+const { check, validationResult } = require('express-validator');
+
+const uuid = require('uuid');
+const cors = require('cors');
+app.use(cors());
+
 let allowedOrigins = [
-    'http://127.0.0.0.1:8080',
-    'https://fataleflix.herokuapp.com/',
-    'http://localhost:1234'];
+  'http://127.0.0.0.1:8080',
+  'https://fataleflix.herokuapp.com/',
+  'http://localhost:1234'];
 
 //MongoDB Atlas and Heroku connection
 console.log(process.env);
@@ -27,35 +41,41 @@ mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,});
 
-const app = express();
+mongoose.set('useFindAndModify', false);
+
+    app.use(
+      cors({
+        origin: (origin, callback) => {
+          if (!origin) return callback(null, true);
+          if (allowedOrigins.indexOf(origin) === -1) {
+            let message =
+              'the CORS policy for this application does not allow access from origin' +
+              origin;
+            return callback(new Error(message), false);
+          }
+          return callback(null, true);
+        },
+      })
+    );
 
 // Middleware
-app.use(bodyParser.json());
+app.use(morgan('common'));
 app.use(express.static('public'));
-app.use(morgan('common'))
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+app.use(bodyParser.json());
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        let message =
-          'the CORS policy for this application does not allow access from origin' +
-          origin;
-        return callback(new Error(message), false);
-      }
-      return callback(null, true);
-    },
-  })
-);
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: true,
+//   })
+// );
 
  //imports auth.js into index.js
 let auth = require('./auth')(app);
+
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('something broke!');
+});
 
 // Get the main page
 app.get('/', (req, res) => {
@@ -166,7 +186,7 @@ app.post(
     Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
-          return res.status(400).json(user);
+          return res.status(400).send(req.body.Email + 'already exists');
         } else {
           Users.create({
             Username: req.body.Username,
@@ -211,7 +231,7 @@ app.get(
   '/users/:Username',
   passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Users.find({ Username: req.params.Username })
+    Users.findOne({ Username: req.params.Username })
       .then((user) => {
         res.json(user);
       })
@@ -331,12 +351,6 @@ app.delete(
     );
   }
 );
-
-//returns error message
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send('oops! something broke!' + '<p>' + 'error: ' + err);
-});
 
 // listen for requests
 const host = '0.0.0.0';
