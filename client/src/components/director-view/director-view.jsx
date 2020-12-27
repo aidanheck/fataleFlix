@@ -22,10 +22,10 @@ export class DirectorView extends React.Component {
           return (
                <Container>
                     <div className="director-view">
-                         <Card style={{ width: '50rem' }}>
+                         <Card style={{ width: '50rem' }} className="director-card">
                               <Card.Body>
                                    <Card.Title>{director.Director.Name}</Card.Title>
-                                   <Card.Text>Bio: {director.Director.ButtonBio}</Card.Text>
+                                   <Card.Text>{director.Director.Bio}</Card.Text>
                               </Card.Body>
                               <Link to={"/"}>
                                    <Button variant="outline-danger">back</Button>

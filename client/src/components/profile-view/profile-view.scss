@@ -3,6 +3,7 @@
      padding-top: 2%;
      color: #222222;
      position: relative;
+     margin: auto;
 }
 
 .profile-button {
@@ -10,4 +11,10 @@
      width: 100%;
      margin-right: 5px;
      margin: auto;
+}
+
+.profile-card {
+     padding: 20px;
+     margin: auto;
+     background-color: rgba(255, 255, 255, 0.75);
 }

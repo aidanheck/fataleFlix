@@ -71,10 +71,10 @@ export class FilmView extends React.Component {
                                    </div>
                                    <div>
                                         <Button onClick={() => this.addUserQueue(film)}
-                                             variant="outline-danger">add film to queue</Button>
+                                             variant="outline-danger" className="btn">add film to queue</Button>
                                    </div>
                                    <Link to='/'>
-                                        <Button variant="outline-danger" className="btn back-button">back</Button>
+                                        <Button variant="outline-danger" className="btn">home</Button>
                                    </Link>
                               </div>
                          </Col>

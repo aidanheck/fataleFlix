@@ -23,21 +23,15 @@ export class GenreView extends React.Component {
 
           return (
                <Container>
-                    <div className="genre-view">
-                         <Card style={{ width: '35rem' }}>
-                              <Row>
-                                   <Col xs={1}></Col>
-                                   <Col>
-                                        <span>{genre.Name}</span></Col>
-                                   <Col xs={8}>
-                                        <span>{genre.Description}</span>
-                                   </Col>
-                              </Row>
-                              <Row>
-                                   <Link to={"/"}>
-                                        <Button variant="outline-danger">back</Button>
-                                   </Link>
-                              </Row>
+                    <div className="director-view">
+                         <Card style={{ width: '50rem' }} className="genre-card">
+                              <Card.Body>
+                                   <Card.Title>{genre.Name}</Card.Title>
+                                   <Card.Text>{genre.Description}</Card.Text>
+                              </Card.Body>
+                              <Link to={"/"}>
+                                   <Button variant="outline-danger">back</Button>
+                              </Link>
                          </Card>
                     </div>
                </Container>

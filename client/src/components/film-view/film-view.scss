@@ -1,5 +1,6 @@
 .film-view-container {
      padding-top: 10%;
+     padding-bottom: 10%;
 }
 
 .film-card {
@@ -8,7 +9,7 @@
 
 .film-poster {
      width: 350px;
-     border: 3px solid rgba(255, 0, 0, 0.5);
+     border: 3px solid #ff000080;
      box-shadow: inset;
 }
 
@@ -22,4 +23,16 @@
      font-weight: 400;
      font-style: italic;
      padding-bottom: 1%;
+}
+
+a {
+     color: rgb(247, 0, 0);
+}
+
+a:hover {
+     color: #222;
+}
+
+.btn {
+     margin-top: 10px;
 }

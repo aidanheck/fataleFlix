@@ -115,7 +115,7 @@ export class ProfileView extends React.Component {
           return (
                <Container fluid>
                     <div className="profile-view">
-                         <Card style={{ width: '50%' }}>
+                         <Card style={{ width: '50%' }} className="profile-card">
                               <Card.Body>
                                    <Card.Text>Username: {Username} </Card.Text>
                                    <Card.Text> Email: {Email} </Card.Text>
@@ -127,7 +127,8 @@ export class ProfileView extends React.Component {
                                                   <Button variant="outline-danger">{film.Title}</Button>
                                              </Link>
                                              <Button variant="outline-danger" onClick={(e) => this.deleteQueueItem(film._id)}>remove from queue</Button></div>
-                                   ))}<br></br>
+                                   ))}
+                                   <br></br>
                                    <br></br>
                                    <div className="profile-button" >
                                         <Button block variant="outline-danger" onClick={() => this.deleteUser()}>delete user</Button>

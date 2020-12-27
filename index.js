@@ -5,6 +5,8 @@ const express = require('express'),
   Models = require('./models.js');
   morgan = require('morgan');
 
+const path = require("path");
+
 const app = express();
 const Films = Models.Film;
 const Users = Models.User;
@@ -60,6 +62,10 @@ mongoose.set('useFindAndModify', false);
 // Middleware
 app.use(morgan('common'));
 app.use(express.static('public'));
+app.use("/client", express.static(path.join(__dirname, "client", "dist")));
+app.get("/client/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
 app.use(bodyParser.json());
 
 // app.use(

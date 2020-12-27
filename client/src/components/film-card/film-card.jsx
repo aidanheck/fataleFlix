@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import CardColumns from 'react-bootstrap/CardColumns';
 
 import { Link } from 'react-router-dom';
 
@@ -20,16 +21,18 @@ export class FilmCard extends React.Component {
           // }
           if (film) {
                return (
-                    <Card className="film-card" style={{ width: '25rem' }}>
-                         <Card.Img variant="top" src={film.ImagePath} />
-                         <Card.Body>
-                              <Card.Title>{film.Title}</Card.Title>
-                              <Card.Text>{film.Description}</Card.Text>
-                              <Link to={`/films/${film._id}`}>
-                                   <Button variant="outline-danger">open</Button>
-                              </Link>
-                         </Card.Body>
-                    </Card>
+                    <CardColumns style={{ display: 'flex', flexDirection: 'row' }}>
+                         <Card className="film-card" style={{ width: '30rem', flex: 1 }} >
+                              <Card.Img variant="top" src={film.ImagePath} />
+                              <Card.Body>
+                                   <Card.Title>{film.Title} ({film.Released})</Card.Title>
+                                   {/* <Card.Text>{film.Description}</Card.Text> */}
+                                   <Link to={`/films/${film._id}`}>
+                                        <Button variant="outline-danger">open</Button>
+                                   </Link>
+                              </Card.Body>
+                         </Card>
+                    </CardColumns>
                );
           }
      }
