@@ -31,7 +31,7 @@ export function RegistrationView() {
                     // console.log(response);
                     // console.log(response.data);
                     // alert('Registered!');
-                    window.open('/', '_self');
+                    window.open('/client', '_self');
                })
                .catch((e) => {
                     console.log(e.response);

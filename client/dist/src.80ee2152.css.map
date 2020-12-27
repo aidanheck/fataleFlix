@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.scss"],"names":[],"mappings":"AAGA;EACE,OAJM;;;AAOR;EACE","file":"src.80ee2152.css","sourceRoot":"../client/src","sourcesContent":["$color: steelblue;\n$background-color: #222;\n\n.fataleFlix {\n  color: $color;\n}\n\nlink {\n  color: #b4000f;\n}"]}

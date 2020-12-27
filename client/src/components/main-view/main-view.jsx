@@ -91,7 +91,7 @@ export class MainView extends React.Component {
           // if (!films) return <div className="main-view" />;
 
           return (
-               <Router basename="/client">
+               <Router basename="client">
                     <Navbar sticky="top" className="navbar-style" variant="dark" expand="lg">
                          <Navbar.Brand className="navbar-brand" href="/"><img width="150px" src="https://i.postimg.cc/MT7tXv8K/fataleflixlogo.png"></img></Navbar.Brand>
                          <Navbar.Toggle aria-controls="basic-navbar-nav" />

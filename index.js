@@ -62,10 +62,12 @@ mongoose.set('useFindAndModify', false);
 // Middleware
 app.use(morgan('common'));
 app.use(express.static('public'));
+
 app.use("/client", express.static(path.join(__dirname, "client", "dist")));
 app.get("/client/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
+
 app.use(bodyParser.json());
 
 // app.use(
