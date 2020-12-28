@@ -1,35 +1,20 @@
 require('dotenv').config({ debug: process.env.DEBUG });
+
+const path = require("path");
+
 const express = require('express'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
   Models = require('./models.js');
   morgan = require('morgan');
 
-const path = require("path");
-
 const app = express();
 const Films = Models.Film;
 const Users = Models.User;
 
-  //imports passport into index.js
-const passport = require('passport');
-passport.serializeUser(function (user, done) {
-  done(null, user.id);
-});
-passport.deserializeUser(function (id, done) {
-  User.findByID(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-require('./passport');
-
-app.use(passport.initialize());
-
 const { check, validationResult } = require('express-validator');
 
 const cors = require('cors');
-app.use(cors());
 
 let allowedOrigins = [
   'http://127.0.0.0.1:8080',
@@ -60,24 +45,32 @@ mongoose.set('useFindAndModify', false);
     );
 
 // Middleware
+app.use(bodyParser.json());
 app.use(morgan('common'));
-app.use(express.static('public'));
-
+app.use(express.static('/public/'));
 app.use("/client", express.static(path.join(__dirname, "client", "dist")));
+app.use(cors());
 app.get("/client/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
-app.use(bodyParser.json());
-
-// app.use(
-//   bodyParser.urlencoded({
-//     extended: true,
-//   })
-// );
-
  //imports auth.js into index.js
 let auth = require('./auth')(app);
+
+//imports passport into index.js
+  const passport = require('passport');
+  passport.serializeUser(function (user, done) {
+    done(null, user.id);
+  });
+  passport.deserializeUser(function (id, done) {
+    User.findByID(id, function(err, user) {
+      done(err, user);
+    });
+  });
+  
+require('./passport');
+  
+app.use(passport.initialize());
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);

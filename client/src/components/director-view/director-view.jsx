@@ -2,8 +2,7 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
 import { Link } from 'react-router-dom';
 
 import './director-view.scss';
@@ -20,8 +19,8 @@ export class DirectorView extends React.Component {
           if (!director) return <div className='main-view' />;
 
           return (
-               <Container>
-                    <div className="director-view">
+               <div className="director-view">
+                    <Container>
                          <Card style={{ width: '50rem' }} className="director-card">
                               <Card.Body>
                                    <Card.Title>{director.Director.Name}</Card.Title>
@@ -31,8 +30,8 @@ export class DirectorView extends React.Component {
                                    <Button variant="outline-danger">back</Button>
                               </Link>
                          </Card>
-                    </div>
-               </Container>
+                    </Container>
+               </div>
           );
      }
 }

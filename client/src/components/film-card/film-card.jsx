@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from 'react-bootstrap/Button';
@@ -15,10 +15,7 @@ export class FilmCard extends React.Component {
      render() {
           //this is given to the <FilmCard/> component by the outer world which, in this case, is 'MainView', as 'MainView' is what's connected to your database via the films endpoint of your API
           const { film } = this.props;
-          // let filmDescription = film.Description;
-          // if (filmDescription.length > MAX_CHARS_IN_DESC) {
-          //      filmDescription = `${filmDescription.substring(0, MAX_CHARS_IN_DESC)}...`;
-          // }
+
           if (film) {
                return (
                     <CardColumns style={{ display: 'flex', flexDirection: 'row' }}>

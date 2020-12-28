@@ -10,7 +10,7 @@ import Col from 'react-bootstrap/Col';
 
 import './films-list.scss';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
      const { visibilityFilter } = state;
      return { visibilityFilter };
 };
@@ -20,7 +20,7 @@ function FilmsList(props) {
      let filteredFilms = films;
 
      if (visibilityFilter !== '') {
-          filteredFilms = films.filter(f => f.Title.includes(visibilityFilter));
+          filteredFilms = films.filter((f) => f.Title.includes(visibilityFilter));
      }
 
      if (!films) return <div className="main-view" />;

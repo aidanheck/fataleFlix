@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-// import { response } from 'express';
 
 import './registration-view.scss';
 
@@ -28,9 +28,7 @@ export function RegistrationView() {
                .then((response) => {
                     const data = response.data;
                     console.log(data);
-                    // console.log(response);
-                    // console.log(response.data);
-                    // alert('Registered!');
+                    alert('Registered!');
                     window.open('/client', '_self');
                })
                .catch((e) => {

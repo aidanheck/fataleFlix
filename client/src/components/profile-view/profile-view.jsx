@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
@@ -10,8 +10,8 @@ import Card from 'react-bootstrap/Card';
 
 export class ProfileView extends React.Component {
 
-     constructor() {
-          super();
+     constructor(props) {
+          super(props);
           this.state = {
                Username: null,
                Password: null,
@@ -20,6 +20,13 @@ export class ProfileView extends React.Component {
                Queue: [],
                films: []
           };
+     }
+
+     componentDidMount() {
+          const accessToken = localStorage.getItem('token');
+          if (accessToken !== null) {
+               this.getUser(accessToken);
+          }
      }
 
      getUser(token) {
@@ -32,10 +39,6 @@ export class ProfileView extends React.Component {
                     data: {},
                },
           })
-               // .get(`https://fataleflix.herokuapp.com/users/${username}`, {
-               //      headers: { Authorization: `Bearer ${token}` }
-               // })
-
                .then(res => {
                     this.setState({
                          Username: res.data.Username,
@@ -58,13 +61,6 @@ export class ProfileView extends React.Component {
           window.open('/', '_self');
      };
 
-     componentDidMount() {
-          const accessToken = localStorage.getItem('token');
-          if (accessToken !== null) {
-               this.getUser(accessToken);
-          }
-     }
-
      deleteUser() {
           axios
                .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}`,
@@ -85,21 +81,21 @@ export class ProfileView extends React.Component {
                });
      }
 
-     // deleteQueueItem(filmID) {
-     //      console.log(this.props.films);
-     //      axios
-     //           .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/queue/${filmID}`,
-     //                {
-     //                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-     //                }
-     //           )
-     //           .then(res => {
-     //                alert('removed item from queue');
-     //           })
-     //           .catch(err => {
-     //                alert('error removing item' + err);
-     //           });
-     // }
+     deleteQueueItem(filmID) {
+          console.log(this.props.films);
+          axios
+               .delete(`https://fataleflix.herokuapp.com/users/${localStorage.getItem('user')}/queue/${filmID}`,
+                    {
+                         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                    }
+               )
+               .then(res => {
+                    alert('removed item from queue');
+               })
+               .catch(err => {
+                    alert('error removing item' + err);
+               });
+     }
 
      // goBack() {
      //      history.back();
@@ -113,8 +109,8 @@ export class ProfileView extends React.Component {
           const QueuedFilms = films.filter((film) => userQueue.includes(film._id));
 
           return (
-               <Container fluid>
-                    <div className="profile-view">
+               <div className="profile-view">
+                    <Container fluid>
                          <Card style={{ width: '50%' }} className="profile-card">
                               <Card.Body>
                                    <Card.Text>Username: {Username} </Card.Text>
@@ -138,8 +134,8 @@ export class ProfileView extends React.Component {
                                    </div>
                               </Card.Body>
                          </Card>
-                    </div>
-               </Container>
+                    </Container>
+               </div>
           );
      }
 };

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
-import { setFilms } from '../../actions/actions';
+import { setFilms, setUser } from '../../actions/actions';
 
 import FilmsList from '../films-list/films-list';
 import { FilmView } from '../film-view/film-view';
@@ -63,6 +63,7 @@ export class MainView extends React.Component {
 
 
      onLoggedIn(authData) {
+          console.log(authData);
           this.setState({
                user: authData.user.Username
           });
@@ -79,6 +80,8 @@ export class MainView extends React.Component {
 
           localStorage.removeItem('token');
           localStorage.removeItem('user');
+
+          window.open('/', '_self');
      }
 
 
@@ -88,19 +91,19 @@ export class MainView extends React.Component {
 
           // if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
           // //before the films have been loaded
-          // if (!films) return <div className="main-view" />;
+          if (!films) return <div className="main-view" />;
 
           return (
-               <Router basename="client">
+               <Router basename="/client">
                     <Navbar sticky="top" className="navbar-style" variant="dark" expand="lg">
                          <Navbar.Brand className="navbar-brand" href="/"><img width="150px" src="https://i.postimg.cc/MT7tXv8K/fataleflixlogo.png"></img></Navbar.Brand>
                          <Navbar.Toggle aria-controls="basic-navbar-nav" />
                          <Navbar.Collapse id="basic-navbar-nav">
                               <Nav className="mr-auto">
-                                   <Nav.Link href="/">home</Nav.Link>
+                                   <Nav.Link as {Link} to='/'>home</Nav.Link>
                                    <Nav.Link as={Link} to='/users/:Username'>profile</Nav.Link>
-                                   <Nav.Link href="/register">register</Nav.Link>
-                                   <Nav.Link href="/login">login</Nav.Link>
+                                   <Nav.Link as {Link} to='/register'>register</Nav.Link>
+                                   <Nav.Link has {Link} to='/login'>login</Nav.Link>
                                    <Nav.Link onClick={() => this.onLoggedOut()}>logout</Nav.Link>
                               </Nav>
                               <Form inline>
@@ -109,8 +112,8 @@ export class MainView extends React.Component {
                               </Form>
                          </Navbar.Collapse>
                     </Navbar>
-                    <Container fluid>
-                         <div className="main-view">
+                    <div className="main-view">
+                         <Container fluid>
                               <Row className="main-container">
                                    <Route exact path="/" render={() => {
                                         if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
@@ -140,8 +143,8 @@ export class MainView extends React.Component {
                                    <Route path="/users/:Username" render={() => <ProfileView films={films} />}
                                    />
                               </Row>
-                         </div>
-                    </Container>
+                         </Container>
+                    </div>
                </Router >
           );
      }
