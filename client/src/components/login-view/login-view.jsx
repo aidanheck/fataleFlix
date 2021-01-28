@@ -24,11 +24,11 @@ export function LoginView(props) {
                     props.onLoggedIn(data);
                })
                .catch((e) => {
-                    console.log('no such user'),
+                    console.log(e),
                          alert('make sure all login info is entered correctly!');
                });
-     };
 
+     };
 
      return (
           <Container className="login-container">

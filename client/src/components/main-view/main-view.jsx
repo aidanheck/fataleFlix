@@ -8,8 +8,8 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import { setFilms, setUser } from '../../actions/actions';
 
 import FilmsList from '../films-list/films-list';
+
 import { FilmView } from '../film-view/film-view';
-import { FilmCard } from '../film-card/film-card';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { DirectorView } from '../director-view/director-view';
@@ -23,7 +23,6 @@ import FormControl from 'react-bootstrap/FormControl';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 
 import './main-view.scss';
 
@@ -32,22 +31,21 @@ export class MainView extends React.Component {
      constructor() {
           super();
 
-          this.state = {
-               user: null,
-          };
+          this.state = {};
      }
 
-     // One of the "hooks" available in a React Component
 
      componentDidMount() {
           let accessToken = localStorage.getItem('token');
           if (accessToken !== null) {
-               this.setState({
-                    user: localStorage.getItem('user'),
-               });
+               const user = localStorage.getItem('user');
+               this.props.setUser(user);
                this.getFilms(accessToken);
+               this.getUserInfo(user, accessToken);
+               window.scrollTo(0, 0);
           }
      }
+
 
      getFilms(token) {
           axios.get('https://fataleflix.herokuapp.com/films', {
@@ -77,17 +75,13 @@ export class MainView extends React.Component {
           this.setState({
                user: null
           });
-
           localStorage.removeItem('token');
           localStorage.removeItem('user');
-
           window.open('/', '_self');
      }
 
-
      render() {
-          let { films } = this.props;
-          let { user } = this.state;
+          let { films, user } = this.props;
 
           // if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
           // //before the films have been loaded
@@ -100,10 +94,10 @@ export class MainView extends React.Component {
                          <Navbar.Toggle aria-controls="basic-navbar-nav" />
                          <Navbar.Collapse id="basic-navbar-nav">
                               <Nav className="mr-auto">
-                                   <Nav.Link as {Link} to='/'>home</Nav.Link>
-                                   <Nav.Link as={Link} to='/users/:Username'>profile</Nav.Link>
-                                   <Nav.Link as {Link} to='/register'>register</Nav.Link>
-                                   <Nav.Link has {Link} to='/login'>login</Nav.Link>
+                                   <Nav.Link href='/client'>home</Nav.Link>
+                                   <Nav.Link href='/client/users/:Username'>profile</Nav.Link>
+                                   <Nav.Link href='/client/register'>register</Nav.Link>
+                                   <Nav.Link href='/client/login'>login</Nav.Link>
                                    <Nav.Link onClick={() => this.onLoggedOut()}>logout</Nav.Link>
                               </Nav>
                               <Form inline>
