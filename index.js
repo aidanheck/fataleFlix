@@ -73,7 +73,7 @@ require('./passport');
 app.use(passport.initialize());
 
 app.use(function (err, req, res, next) {
-  console.error(err.stack);
+  console.error(err.message);
   res.status(500).send('something broke!');
 });
 
