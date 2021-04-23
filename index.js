@@ -24,7 +24,7 @@ const passport = require("passport");
 
 const app = express();
 app.use(express.static("public"));
-app.use("/client", express.static(path.join(_dirname, "client", "dist")));
+app.use("/client", express.static(path.join(__dirname, "client", "dist")));
 
 app.get("/client/*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
