@@ -1,1 +1,1 @@
-web: node /client/index.js
+web: node ./index.js
