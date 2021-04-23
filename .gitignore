@@ -5,3 +5,4 @@ client/.babelrc
 .DS_Store
 client/.cache/*
 node_modules
+Procfile
