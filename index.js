@@ -1,7 +1,7 @@
 require("dotenv").config({ debug: process.env.DEBUG });
 
 const mongoose = require("mongoose"),
-  Models = require("./models.js"),
+  Models = require("./client/models.js"),
   Films = Models.Film,
   Users = Models.User;
 
@@ -38,7 +38,7 @@ app.use(morgan("common"));
 const cors = require("cors");
 app.use(cors());
 
-let auth = require("./auth")(app);
+let auth = require("./client/auth")(app);
 
 let allowedOrigins = [
   "http://127.0.0.0.1:8080",
