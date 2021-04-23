@@ -1,4 +1,3 @@
-const { mongo } = require("mongo");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 
