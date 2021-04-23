@@ -1,7 +1,7 @@
 require("dotenv").config({ debug: process.env.DEBUG });
 
 const mongoose = require("mongoose"),
-  Models = require("./client/models.js"),
+  Models = require("./models.js"),
   Films = Models.Film,
   Users = Models.User;
 
@@ -27,7 +27,7 @@ app.use(express.static("public"));
 app.use("/client", express.static(path.join(_dirname, "client", "dist")));
 
 app.get("/client/*", (req, res) => {
-  res.sendFile(path.join(_dirname, "client", "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.use(bodyParser.json());
@@ -38,7 +38,7 @@ app.use(morgan("common"));
 const cors = require("cors");
 app.use(cors());
 
-let auth = require("./client/auth")(app);
+let auth = require("./auth")(app);
 
 let allowedOrigins = [
   "http://127.0.0.0.1:8080",
