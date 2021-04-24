@@ -274,51 +274,53 @@ app.delete(
   }
 );
 
-// // Update a user account by username
-// app.put(
-//   '/users/:Username',
-//   [
-//     check('Username', 'Username is required').isLength({ min: 3 }),
-//     check(
-//       'Username',
-//       'Username contains non alphanumeric characters - not allowed.'
-//     ).isAlphanumeric(),
-//     check('Password', 'Password is required').not().isEmpty(),
-//     check('Email', 'Email does not appear to be valid').isEmail(),
-//   ], passport.authenticate('jwt', { sesson: false }),
-//   (req, res) => {
-//     let errors = validationResult(req);
+// Update a user account by username
+app.put(
+  "/users/:Username",
+  [
+    check("Username", "Username is required").isLength({ min: 3 }),
+    check(
+      "Username",
+      "Username contains non alphanumeric characters - not allowed."
+    ).isAlphanumeric(),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Email does not appear to be valid").isEmail(),
+  ],
+  passport.authenticate("jwt", { sesson: false }),
+  (req, res) => {
+    let errors = validationResult(req);
 
-//     if (!errors.isEmpty()) {
-//       return res.status(422).json({ errors: errors.array() });
-//     }
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
 
-//     let hashedPassword = Users.hashPassword(req.body.Password);
-//     Users.findOneAndUpdate(
-//       { Username: req.params.Username },
-//       {
-//         $set: {
-//           Username: req.body.Username,
-//           Password: hashedPassword,
-//           Email: req.body.Email,
-//           Birthday: req.body.Birthday,
-//         },
-//       },
-//       { new: true })
-//       .then((updatedUser) => {
-//         res.json(updatedUser)
-//       })
-//       .catch((err) => {
-//         if (err) {
-//           console.log(err);
-//           res.status(500).send('Error: ' + err);
-//         })};
-//       })
+    let hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOneAndUpdate(
+      { Username: req.params.Username },
+      {
+        $set: {
+          Username: req.body.Username,
+          Password: hashedPassword,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday,
+        },
+      },
+      { new: true }
+    )
+      .then((updatedUser) => {
+        res.json(updatedUser);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send("Error: " + error);
+      });
+  }
+);
 
 // Add a film to 'watch' list by film ID
 app.post(
-  '/users/:Username/films/:FilmID',
-  passport.authenticate('jwt', { sesson: false }),
+  "/users/:Username/films/:FilmID",
+  passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -329,7 +331,7 @@ app.post(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send('Error: ' + err);
+          res.status(500).send("Error: " + err);
         } else {
           res.json(updatedUser);
         }
@@ -340,8 +342,8 @@ app.post(
 
 // Remove a film from 'watch' list by film ID
 app.delete(
-  '/users/:Username/films/:FilmID',
-  passport.authenticate('jwt', { sesson: false }),
+  "/users/:Username/films/:FilmID",
+  passport.authenticate("jwt", { sesson: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -352,7 +354,7 @@ app.delete(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send('Error: ' + err);
+          res.status(500).send("Error: " + err);
         } else {
           res.json(updatedUser);
         }
@@ -362,8 +364,8 @@ app.delete(
 );
 
 // listen for requests
-const host = '0.0.0.0';
+const host = "0.0.0.0";
 const port = process.env.PORT || 8080;
-app.listen(port, host, function() {
-  console.log('listening on port ' + port);
+app.listen(port, host, function () {
+  console.log("listening on port " + port);
 });
