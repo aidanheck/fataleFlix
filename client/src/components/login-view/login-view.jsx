@@ -27,7 +27,7 @@ export function LoginView(props) {
     //prevents the default behavior of submitting the form so authentication can happen
     e.preventDefault();
     axios
-      .post("https://fataleflix.herokuapp.com/login", {
+      .post("https://fataleflix.herokuapp.com/client/login", {
         Username: username,
         Password: password,
       })

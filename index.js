@@ -1,5 +1,3 @@
-require("dotenv").config({ debug: process.env.DEBUG });
-
 const mongoose = require("mongoose"),
   Models = require("./client/models.js"),
   Films = Models.Film,
@@ -9,10 +7,12 @@ const path = require("path");
 
 //MongoDB Atlas and Heroku connection
 console.log(process.env);
-mongoose.connect(process.env.CONNECTION_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// mongoose.connect(process.env.CONNECTION_URI, {
+//   useNewUrlParser: true,
+// });
+mongoose.connect("mongodb+srv://fataleFlixUser:databasepw***@fataleflixdb.7g43t.gcp.mongodb.net/fataleFlixDB?retryWrites=true&w=majority",
+ { useNewUrlParser: true }
+);
 mongoose.set("useFindAndModify", false);
 
 const express = require("express");
