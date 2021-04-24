@@ -6,22 +6,20 @@
  *@access public
  */
 
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-import { Link } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-
-import "./registration-view.scss";
+import './registration-view.scss';
 
 export function RegistrationView() {
-  const [username, createUsername] = useState("");
-  const [password, createPassword] = useState("");
-  const [email, createEmail] = useState("");
-  const [birthday, createBirthday] = useState("");
+  const [username, createUsername] = useState('');
+  const [password, createPassword] = useState('');
+  const [email, createEmail] = useState('');
+  const [birthday, createBirthday] = useState('');
 
   /**
    * registers a new user and sends their account information to the API
@@ -42,16 +40,16 @@ export function RegistrationView() {
     };
 
     axios
-      .post("https://fataleflix.herokuapp.com/users", createdUser)
+      .post('https://fataleflix.herokuapp.com/users', createdUser)
       .then((response) => {
         const data = response.data;
         console.log(data);
-        alert("Registered!");
-        window.open("/client/login", "_self");
+        alert('registered!');
+        window.open('/client/login', '_self');
       })
       .catch((e) => {
         console.log(e.response);
-        alert("error registering the user");
+        alert('error registering the user');
       });
   };
   return (

@@ -1,24 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 
-import "./genre-view.scss";
+import { Link } from 'react-router-dom';
 
-export class GenreView extends React.Component {
-  constructor(props) {
-    super(props);
+import './genre-view.scss';
+
+export class GenreView extends Component {
+  constructor() {
+    super();
     this.state = {};
-  }
-
-  /**
-   * goes back to previous page
-   *@function goBack
-   */
-  goBack() {
-    history.back();
   }
 
   render() {
@@ -29,18 +23,26 @@ export class GenreView extends React.Component {
     return (
       <div className="genre-view">
         <Container>
-          <Card style={{ width: "50rem" }} className="genre-card">
+          <Card style={{ width: '50rem' }} className="genre-card">
             <Card.Body>
               <Card.Title>{genre.Name}</Card.Title>
               <Card.Text>{genre.Description}</Card.Text>
             </Card.Body>
-
-            <Button onClick={(genre) => this.goBack()} variant="outline-danger">
-              back
-            </Button>
+            <Link to="/">
+              <Button variant="outline-danger">
+                back
+              </Button>
+            </Link>
           </Card>
         </Container>
       </div>
     );
   }
 }
+
+GenreView.propTypes = {
+  genre: PropTypes.shape({
+    Name: PropTypes.string.isRequired,
+    Description: PropTypes.string.isRequired,
+  }).isRequired,
+};

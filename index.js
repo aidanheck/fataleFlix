@@ -1,80 +1,88 @@
-const mongoose = require("mongoose"),
-  Models = require("./client/models.js"),
-  Films = Models.Film,
-  Users = Models.User;
-
-const path = require("path");
-
-//MongoDB Atlas and Heroku connection
-console.log(process.env);
-// mongoose.connect(process.env.CONNECTION_URI, {
-//   useNewUrlParser: true,
-// });
-mongoose.connect("mongodb+srv://fataleFlixUser:databasepw***@fataleflixdb.7g43t.gcp.mongodb.net/fataleFlixDB?retryWrites=true&w=majority",
- { useNewUrlParser: true }
-);
-mongoose.set("useFindAndModify", false);
-
-const express = require("express");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const uuid = require("uuid");
-
-const passport = require("passport");
+/* eslint-disable no-unused-vars */
+/* eslint-disable consistent-return */
+/* eslint-disable max-len */
+/* eslint-disable no-shadow */
+/* eslint-disable no-console */
+const express = require('express');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const passport = require('passport');
 
 const app = express();
-app.use(express.static("public"));
-app.use("/client", express.static(path.join(__dirname, "client", "dist")));
+const path = require('path');
 
-app.get("/client/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+const cors = require('cors');
+const { check, validationResult } = require('express-validator');
+
+require('./client/passport');
+
+const Models = require('./client/models.js');
+
+const Films = Models.Film;
+const Users = Models.User;
+
+// MongoDB Atlas and Heroku connection
+mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
+app.use(morgan('common'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(passport.initialize());
-app.use(morgan("common"));
-
-const cors = require("cors");
 app.use(cors());
+const auth = require('./client/auth')(app);
 
-let auth = require("./client/auth")(app);
-
-let allowedOrigins = [
-  "http://127.0.0.0.1:8080",
-  "https://fataleflix.herokuapp.com/",
-  "http://localhost:1234",
+const allowedOrigins = [
+  'http://127.0.0.0.1:8080',
+  'https://fataleflix.herokuapp.com/',
+  'http://localhost:1234',
 ];
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const message = `The CORS policy for this application does not allow access from origin ${origin}`;
+      return callback(new Error(message), false);
+    }
+    return callback(null, true);
+  },
+}));
 
-//     app.use(
-//       cors({
-//         origin: (origin, callback) => {
-//           if (!origin) return callback(null, true);
-//           if (allowedOrigins.indexOf(origin) === -1) {
-//             let message =
-//               'the CORS policy for this application does not allow access from origin' +
-//               origin;
-//             return callback(new Error(message), false);
-//           }
-//           return callback(null, true);
-//         },
-//       })
-//     );
+app.use('/client', express.static(path.join(__dirname, 'client', 'dist')));
+app.get('/client/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+app.use(express.static('public'));
 
-const { check, validationResult } = require("express-validator");
+// app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(passport.initialize());
 
 // Get the main page
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   res.send(
-    "<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>"
+    '<em>Welcome to fataleFlix, a resource for unsettling films that center women.</em>',
   );
 });
 
-//    ---FILM ENDPOINTS---
-// get a list of ALL films in the API
+// ---FILM ENDPOINTS---
+/** get a list of ALL films in the API
+ @description retrieves list of films from database
+ @example
+ axios({
+     method: 'get',
+     url: 'https://fataleflix.herokuapp.com/client/films',
+     {
+       headers: { Authorization: `Bearer ${token}` }
+     }
+   })
+  @param {string} '/films' endpoint for the films list, requsted by the client
+  @param {object} jwt bearer JSON web token passed with each HTTP request from client
+  @returns {JSON} JSON object containing full list of films, including title, description, director, genre, image url, and featured status * */
+
 app.get(
-  "/films",
-  passport.authenticate("jwt", { session: false }),
+  '/films',
+  passport.authenticate('jwt', { session: false }),
   (req, res) => {
     Films.find()
       .then((film) => {
@@ -82,94 +90,127 @@ app.get(
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error " + err);
+        res.status(500).send(`Error ${err}`);
       });
-  }
+  },
 );
 
-// get a film based on its title
+/**
+ * @function Get a specific film by title
+ * @description retrieves information about a specific film based on the title
+ * @example
+ *  axios({
+ *    method: 'get',
+ *    url: 'https://fataleflix.herokuapp.com/client/films/Midsommar,
+ *    {
+ *      headers: { Authorization: `Bearer ${token}` }
+ *    }
+ *  })
+ * @param {string} '/films/:Title' endpoint for a specific film requested by the client
+ * @param {object} jwt bearer JSON web token passed with each HTTP request from client
+ * @returns {JSON} JSON object containing information about a specific film and its title, description, director, genre, image url, and featured status
+ */
 app.get(
-  "/films/:title",
-  passport.authenticate("jwt", { sesson: false }),
+  '/films/:Title',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
       .then((film) => {
-        res.json(film);
+        res.status(201).json(film);
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + error);
+        res.status(500).send(`Error: ${err}`);
       });
-  }
+  },
 );
 
-// get a genre by name and description based on film title
+/**
+@function get a genre by name
+@description retrieves information about a genre based on the name
+@example
+ axios({
+   method: 'get',
+   url: 'https://fataleflix.herokuapp.com/client/genres/Comedy,
+   {
+     headers: { Authorization: `Bearer ${token}`
+   }
+})
+*@param {string} '/genres/:Name' endpoint for a specific genre, by name, requested by the client
+*@param {object} jwt The bearer json web token passed into the HTTP request from the client
+@returns {JSON} JSON object containing information about a specific genre including the name and description
+*/
 app.get(
-  "/films/:genres/:name",
-  passport.authenticate("jwt", { sesson: false }),
+  '/films/:genres/:Name',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Films.findOne({ Title: req.params.Title })
       .then((film) => {
         res
           .status(201)
           .json(
-            "Genre " +
-              film.Genre.Name +
-              "Description: " +
-              film.Genre.Description
+            `Genre ${film.Genre.Name} Description: ${film.Genre.Description}`,
           );
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send(`Error: ${err}`);
       });
-  }
+  },
 );
 
-// Get a director by name
+/**
+ @function get a director by name
+ @description retrieves information about a director based on the name
+ @example
+  axios({
+    method: 'get',
+    url: 'https://fataleflix.herokuapp.com/client/directors/Karyn%20Kusama,
+    {
+      headers: { Authorization: `Bearer ${token}`
+    }
+})
+ *@param {string} '/directors/:Name' endpoint for a specific director requested by the client
+ *@param {object} jwt The bearer json web token passed into the HTTP request from the client
+ @returns {JSON} JSON object containing information about a specific director and their name and bio
+ */
+
 app.get(
-  "/films/directors/:Name",
-  passport.authenticate("jwt", { sesson: false }),
+  '/films/directors/:Name',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
-    Films.findOne({ "Director.Name": req.params.Name })
-      .then((films) => {
-        res.json(
-          "Name: " + films.Director.Name + " Bio: " + films.Director.Bio
-        );
+    Films.findOne({ 'Director.Name': req.params.Name })
+      .then((director) => {
+        res.status(201).json(director);
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send(`Error: ${err}`);
       });
-  }
+  },
 );
-
-// //imports passport into index.js
-//   const passport = require('passport');
-//   passport.serializeUser(function (user, done) {
-//     done(null, user.id);
-//   });
-//   passport.deserializeUser(function (id, done) {
-//     User.findByID(id, function(err, user) {
-//       done(err, user);
-//     });
-//   });
-
-// require('./passport');
-
-// app.use(passport.initialize());
-
-// app.use(function (err, req, res, next) {
-//   console.error(err.message);
-//   res.status(500).send('something broke!');
-// });
 
 //   ---USER ENDPOINTS---
 
-//get all users
+/**
+@function get all users
+@description retrieves list of users from the database
+@example
+ axios({
+   method: 'get',
+   url: 'https://fataleflix.herokuapp.com/client/users,
+   {
+     headers: { Authorization: `Bearer ${token}`
+   }
+})
+*@param {string} '/users' endpoint for the users list
+*@param {object} jwt The bearer json web token passed into the HTTP request from the client
+@returns {JSON} JSON object containing full list of users, including name, username, hashed password, email, birthdate, and queued films
+*/
+
 app.get(
-  "/users",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.find()
       .then((users) => {
@@ -177,15 +218,28 @@ app.get(
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error " + err);
+        res.status(500).send(`Error ${err}`);
       });
-  }
+  },
 );
 
-// Get a user account by username
+/**
+@function get an account by username
+@description retrieves information about a specific user
+ axios({
+   method: 'get',
+   url: 'https://fataleflix.herokuapp.com/client/users/matilda,
+   {
+     headers: { Authorization: `Bearer ${token}`
+   }
+})
+*@param {string} '/users/:Username' endpoint for a specific user
+*@param {object} jwt The bearer json web token passed into the HTTP request from the client
+@returns {JSON} JSON object containing information about a specific user, including name, username, hashed password, email, birthdate, and queued films
+*/
 app.get(
-  "/users/:Username",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOne({ Username: req.params.Username })
       .then((user) => {
@@ -193,134 +247,191 @@ app.get(
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send(`Error: ${err}`);
       });
-  }
+  },
 );
 
-// //add a user
-// /* we'll expect JSON in this format
-// {
-//   ID: Integer,
-//   Username: String,
-//   Password: String,
-//   Email: String,
-//   Birthday: Date,
-// }
-// */
+/**
+@function add a new user
+@description creates a new user in the database
+@example
+ axios({
+   method: 'post',
+   url: 'https://fataleflix.herokuapp.com/client/users',
+   {
+     "name": "membrane",
+     "username": "membrane",
+     "password": "visc0us1!"",
+     "email": "membranehex@gmail.com",
+     "birth_date": "10-23-1996"
+   }
+})
+*@param {string} '/users' endpoint for users requested by the client
+*@param {JSON} user JSON object containing name, username, password, email, and birthdate
+@returns {JSON} JSON object containing information about the new user, including name, username, hashed password, email, and birthdate.
+*/
 app.post(
-  "/users",
+  '/users',
   [
-    check("Username", "Username is required").isLength({ min: 3 }),
+    check('Username', 'username is required').isLength({
+      min: 3,
+    }),
     check(
-      "Username",
-      "Username containse non alphanumeric characters - not allowed."
+      'Username',
+      'username contains non alphanumeric characters - not allowed.',
     ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
-    check("Email", "Email does not appear to be valid").isEmail(),
+    check('Password', 'password is required').not().isEmpty(),
+    check('Email', 'email does not appear to be valid').isEmail(),
   ],
-  // passport.authenticate('jwt', { sesson: false }),
-
   (req, res) => {
-    let errors = validationResult(req);
+    // check the validation object for errors
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
+      return res.status(422).json({
+        errors: errors.array(),
+      });
     }
-    let hashedPassword = Users.hashPassword(req.body.Password);
-    Users.findOne({ Username: req.body.Username })
+    const hashedPassword = Users.hashPassword(req.body.Password);
+    Users.findOne({
+      Username: req.body.Username,
+    }) // search to see if a user with the requested username already exists
       .then((user) => {
         if (user) {
-          return res.status(400).send(req.body.Email + "already exists");
-        } else {
-          Users.create({
-            Username: req.body.Username,
-            Password: hashedPassword,
-            Email: req.body.Email,
-            Birthday: req.body.Birthday,
-          })
-            .then((user) => {
-              res.status(201).json(user);
-            })
-            .catch((error) => {
-              console.error(error);
-              res.status(500).send("Error: " + error);
-            });
+          // if the user is found, send a response that it already exists
+          return res.status(400).send(`${req.body.Username} already exists`);
         }
+        Users.create({
+          Username: req.body.Username,
+          Password: hashedPassword,
+          Email: req.body.Email,
+          Birthdate: req.body.Birthdate,
+        })
+          .then((user) => {
+            res.status(201).json(user);
+          })
+          .catch((error) => {
+            console.error(error);
+            res.status(500).send(`Error: ${error}`);
+          });
       })
       .catch((error) => {
         console.error(error);
-        res.status(500).send("Error: " + error);
+        res.status(500).send(`Error: ${error}`);
       });
-  }
+  },
 );
 
-// Delete a user account
+/**
+ @function delete a user from the database
+ @description removes a user from the database
+ @example
+  axios({
+      method: 'delete',
+      url: 'https:/fataleflix.herokuapp.com/client/users/membrane',
+      headers: { 'Authorization': `Bearer ${token}` }
+})
+ *@param {string} '/users/:Username' endpoint for a specific user
+ *@param {object} jwt the bearer json web token passed into the HTTP request from the client
+ @returns {string} string message confirming that the user has been deleted
+ */
+
 app.delete(
-  "/users/:Username",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndRemove({ Username: req.params.Username })
       .then((user) => {
         if (!user) {
-          res.status(400).send(req.params.Username + " was not found");
+          res.status(400).send(`${req.params.Username} was not found`);
         } else {
-          res.status(201).send(req.params.Username + " was deleted");
+          res.status(201).send(`${req.params.Username} was deleted`);
         }
       })
       .catch((err) => {
         console.error(err);
-        res.status(500).send("Error: " + err);
+        res.status(500).send(`Error: ${err}`);
       });
-  }
+  },
 );
 
-// Update a user account by username
+/**
+@function update a user's account
+@description update a user's account information in the database. if the user doesn't exist a validation error is thrown
+@example
+ axios({
+      method: 'put',
+      url: 'https://fataleflix.herokuapp.com/client/users/membrane',headers: { 'Authorization': `Bearer ${token}` },
+   {
+     "name": "membrane",
+     "username": "membrane",
+     "password": "visc0us1!"",
+     "email": "membranehex@gmail.com",
+     "birth_date": "10-23-1996"
+   }
+})
+*@param {string} '/users/:Username' endpoint for a specific user, by username, requested by the client
+*@param {object} jwt The bearer json web token passed into the HTTP request from the client
+*@param {JSON} user JSON object containing user's updated name, username, password, email, and/or birthdate
+@returns {JSON} JSON object containing the user's updated name, username, hashed password, email, and/or birthdate
+*/
 app.put(
-  "/users/:Username",
-  [
-    check("Username", "Username is required").isLength({ min: 3 }),
-    check(
-      "Username",
-      "Username contains non alphanumeric characters - not allowed."
-    ).isAlphanumeric(),
-    check("Password", "Password is required").not().isEmpty(),
-    check("Email", "Email does not appear to be valid").isEmail(),
-  ],
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username',
+  passport.authenticate('jwt', {
+    session: false,
+  }),
   (req, res) => {
-    let errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
-
-    let hashedPassword = Users.hashPassword(req.body.Password);
+    const hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOneAndUpdate(
-      { Username: req.params.Username },
+      {
+        Username: req.params.Username,
+      },
       {
         $set: {
           Username: req.body.Username,
           Password: hashedPassword,
           Email: req.body.Email,
-          Birthday: req.body.Birthday,
+          BirthDate: req.body.BirthDate,
         },
       },
-      { new: true }
-    )
-      .then((updatedUser) => {
-        res.json(updatedUser);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(500).send("Error: " + error);
-      });
-  }
+      {
+        new: true,
+      },
+      (err, updatedUser) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send(`Error: ${err}`);
+        } else {
+          res.json(updatedUser);
+        }
+      },
+    );
+  },
 );
 
-// Add a film to 'watch' list by film ID
+/**
+@function add a film to the user's queue
+@description adds a film in the database to the user's queue
+@example
+ axios({
+   method: 'post',
+   url: 'https://fataleflix.herokuapp.com/client/users/membrane/Films/18293050',
+   {
+     "name": "membrane",
+     "username": "membrane",
+     "password": "visc0us1!"",
+     "email": "membranehex@gmail.com",
+     "birth_date": "10-23-1996"
+   }
+})
+*@param {string} '/users/:Username/Films/:FilmID' endpoint for specific user and film ID requested by the client
+*@param {object} jwt The bearer json web token passed into the HTTP request from the client
+@returns {object} user object containing information about the user, including name, username, hashed password, email, birthdate, and new queued films
+*/
+
 app.post(
-  "/users/:Username/films/:FilmID",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username/films/:FilmID',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -331,19 +442,32 @@ app.post(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send(`Error: ${err}`);
         } else {
           res.json(updatedUser);
         }
-      }
+      },
     );
-  }
+  },
 );
 
-// Remove a film from 'watch' list by film ID
+/**
+ @function delete a film from the user's queue
+ @description removes a film from a user's queued films
+ @example
+  axios({
+      method: 'delete',
+      url: 'https://fataleflix.herokuapp.com/client/users/membrane/Films/16582495',
+      headers: { 'Authorization': `Bearer ${token}` }
+})
+ *@param {string} '/users/:Username/Films/:FilmID' endpoint for a specific user and filmID
+ *@param {object} jwt the bearer json web token passed into the HTTP request from the client
+ @returns {object} user object containing user's name, username, hashed password, email, birthdate, and new queued films
+ */
+
 app.delete(
-  "/users/:Username/films/:FilmID",
-  passport.authenticate("jwt", { sesson: false }),
+  '/users/:Username/films/:FilmID',
+  passport.authenticate('jwt', { sesson: false }),
   (req, res) => {
     Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -354,18 +478,23 @@ app.delete(
       (err, updatedUser) => {
         if (err) {
           console.error(err);
-          res.status(500).send("Error: " + err);
+          res.status(500).send(`Error: ${err}`);
         } else {
           res.json(updatedUser);
         }
-      }
+      },
     );
-  }
+  },
 );
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('something broke!');
+});
+
 // listen for requests
-const host = "0.0.0.0";
+const host = '0.0.0.0';
 const port = process.env.PORT || 8080;
-app.listen(port, host, function () {
-  console.log("listening on port " + port);
+app.listen(port, host, () => {
+  console.log(`listening on port ${port}`);
 });

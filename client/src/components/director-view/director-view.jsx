@@ -1,47 +1,36 @@
-import React from "react";
-import axios from "axios";
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react/prop-types */
+import React, { Component } from 'react';
+import Container from 'react-bootstrap/Container';
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
-import Container from "react-bootstrap/Container";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
+import './director-view.scss';
 
-import { Link } from "react-router-dom";
-
-import "./director-view.scss";
-
-export class DirectorView extends React.Component {
+export class DirectorView extends Component {
   constructor(props) {
     super(props);
     this.state = {};
   }
 
-  /**
-   * goes back to previous page
-   *@function goBack
-   */
-  goBack() {
-    history.back();
-  }
-
   render() {
-    const { films, director } = this.props;
+    const { film, director } = this.props;
 
     if (!director) return <div className="main-view" />;
 
     return (
       <div className="director-view">
         <Container>
-          <Card style={{ width: "50rem" }} className="director-card">
+          <Card style={{ width: '50rem' }} className="director-card">
             <Card.Body>
-              <Card.Title>{director.Director.Name}</Card.Title>
-              <Card.Text>{director.Director.Bio}</Card.Text>
+              <Card.Title>{film.Director.Name}</Card.Title>
+              <Card.Text>{film.Director.Bio}</Card.Text>
             </Card.Body>
-            <Button
-              onClick={(director) => this.goBack()}
-              variant="outline-danger"
-            >
-              back
-            </Button>
+            <Link to={`/films/${film._id}`}>
+              <Button variant="outline-danger">back</Button>
+            </Link>
           </Card>
         </Container>
       </div>

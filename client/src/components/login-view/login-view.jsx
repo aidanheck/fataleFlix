@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-import { RegistrationView } from "../registration-view/registration-view";
+import { Link } from 'react-router-dom';
 
-import { Link } from "react-router-dom";
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-
-import "../login-view/login-view.scss";
+import './login-view.scss';
 
 export function LoginView(props) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   /**
    * submits username and password to API and logs user in if user's information is correct
@@ -24,26 +22,25 @@ export function LoginView(props) {
    */
 
   const handleSubmit = (e) => {
-    //prevents the default behavior of submitting the form so authentication can happen
+    // prevents the default behavior of submitting the form so authentication can happen
     e.preventDefault();
     axios
-      .post("https://fataleflix.herokuapp.com/client/login", {
+      .post('https://fataleflix.herokuapp.com/client/login', {
         Username: username,
         Password: password,
       })
-      //response comes in from the database
+      // response comes in from the database
       .then((response) => {
-        //if there is a match in the database, onLoggedIn is called
+        // if there is a match in the database, onLoggedIn is called
         const data = response.data;
         props.onLoggedIn(data);
       })
       .catch((e) => {
-        console.log(e), alert("make sure all login info is entered correctly!");
+        console.log('no such user.');
       });
-
-    if (props.userData) {
-      window.location = "/client/films";
-    }
+    // if (props.userData) {
+    //   window.location = '/client/films';
+    // }
   };
 
   return (
@@ -75,7 +72,7 @@ export function LoginView(props) {
             size="sm"
             block
             onClick={handleSubmit}
-          ></Button>
+          />
           <Link to="/register">
             <Button variant="outline-danger" size="sm">
               register

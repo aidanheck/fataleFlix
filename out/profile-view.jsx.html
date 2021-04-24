@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: profile-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: profile-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *@description this component allows the user to view and update their profile
+ *@requires React
+ *@requires axios
+ *@requires React-Router-Dom
+ *@requires React-Bootstrap
+ *@access private
+ */
+import React from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
+import { BrowserRouter, Link } from "react-router-dom";
+
+import "./profile-view.scss";
+
+import Form from "react-bootstrap/Form";
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+
+export class ProfileView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      Username: null,
+      Password: null,
+      Email: null,
+      Birthday: null,
+      Queue: [],
+      films: [],
+    };
+  }
+  //   const { films, user, userInfo } = props;
+  componentDidMount() {
+    const accessToken = localStorage.getItem("token");
+    if (accessToken !== null) {
+      this.getUser(accessToken);
+    }
+  }
+
+  getUser(token) {
+    const username = localStorage.getItem("user");
+    axios({
+      method: "get",
+      url: `https://fataleflix.herokuapp.com/users/${username}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        data: {},
+      },
+    })
+      .then((res) => {
+        this.setState({
+          Username: res.data.Username,
+          Password: res.data.Password,
+          Email: res.data.Email,
+          Birthday: res.data.Birthday,
+          Queue: res.data.Queue,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  onLoggedOut() {
+    localStorage.removeItem("token", "user");
+    // this.setState({
+    //      user: null
+    // })
+    window.open("/", "_self");
+  }
+
+  /**
+   * deletes a user's profile
+   *@function deleteUser
+   *@param {string} user
+   */
+
+  deleteUser() {
+    axios
+      .delete(
+        `https://fataleflix.herokuapp.com/users/${localStorage.getItem(
+          "user"
+        )}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        this.setState({
+          user: nullheroku,
+        });
+        window.open("/client/login", "_self");
+      })
+      .catch((error) => {
+        alert("there was an error - your account could not be deleted" + error);
+      });
+  }
+  /**
+   * Deletes an added film from the queue
+   *@function deleteQueueItem
+   *@param {string} filmId
+   */
+
+  deleteQueueItem(filmID) {
+    console.log(this.props.films);
+    axios
+      .delete(
+        `https://fataleflix.herokuapp.com/users/${localStorage.getItem(
+          "user"
+        )}/queue/${filmID}`,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      )
+      .then((res) => {
+        alert("removed item from queue");
+      })
+      .catch((err) => {
+        alert("error removing item" + err);
+      });
+  }
+
+  render() {
+    const { Queue, Username, Email, Birthday } = this.state;
+    const { films } = this.props;
+    const userQueue = this.state.Queue;
+    const QueuedFilms = films.filter((film) => userQueue.includes(film._id));
+
+    return (
+      &lt;div className="profile-view">
+        &lt;Container fluid>
+          &lt;Card style={{ width: "50%" }} className="profile-card">
+            &lt;Card.Body>
+              &lt;Card.Text>Username: {Username} &lt;/Card.Text>
+              &lt;Card.Text> Email: {Email} &lt;/Card.Text>
+              &lt;Card.Text>Birthday: {Birthday} &lt;/Card.Text>
+              Queue:{" "}
+              {QueuedFilms.map((film) => (
+                &lt;div key={film._id} className="queued-films-button">
+                  &lt;Link to={`/films/${film._id}`}>
+                    &lt;Button variant="outline-danger">{film.Title}&lt;/Button>
+                  &lt;/Link>
+                  &lt;Button
+                    variant="outline-danger"
+                    onClick={(e) => this.deleteQueueItem(film._id)}
+                  >
+                    remove from queue
+                  &lt;/Button>
+                &lt;/div>
+              ))}
+              &lt;br>&lt;/br>
+              &lt;br>&lt;/br>
+              &lt;div className="profile-button">
+                &lt;Link to="/update/:username">
+                  &lt;Button block variant="outline-danger">
+                    update profile delete user
+                  &lt;/Button>
+                &lt;/Link>
+                &lt;Button
+                  block
+                  variant="outline-danger"
+                  onClick={() => this.deleteUser()}
+                >
+                  delete user
+                &lt;/Button>
+                &lt;Button
+                  block
+                  variant="outline-danger"
+                  onClick={this.onLoggedOut.bind(this)}
+                >
+                  logout
+                &lt;/Button>
+              &lt;/div>
+              ß
+            &lt;/Card.Body>
+          &lt;/Card>
+        &lt;/Container>
+      &lt;/div>
+    );
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    userInfo: state.userInfo,
+  };
+};
+
+export default connect(mapStateToProps, { setProfile })(ProfileView);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#deleteQueueItem">deleteQueueItem</a></li><li><a href="global.html#deleteUser">deleteUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Apr 23 2021 21:11:37 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

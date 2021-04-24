@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: film-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: film-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *@description this component shows the individual film's details.
+ *@requires React
+ *@requires axios
+ *@requires Prop-Types
+ *@requires React-Bootstrap
+ *@requires React-Router-Dom
+ *@access private
+ */
+
+import React from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+
+import "./film-view.scss";
+
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+
+export class FilmView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    window.scrollTo(0, 0);
+  }
+
+  /**
+   * goes back to the previous page
+   *@function goBack
+   */
+  goBack() {
+    history.back();
+    window.scroll(0, 0);
+  }
+
+  /**
+   * adds a film to a user's queue
+   *@function addQueueItem
+   *@param {string} user
+   *@param {string} movieId
+   */
+  addQueueItem(queue) {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    const { film } = this.props;
+    e.preventDefault();
+    axios
+      .post(
+        `https://fataleflix.herokuapp.com/users/${user}/films/${film._id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((res) => {
+        console.log(res);
+        alert(`${film.Title} was added to your queue.`);
+      })
+      .catch((err) => {
+        alert(err + `${film.Title} was not added to your queue.`);
+      });
+  }
+
+  render() {
+    const { film, userInfo } = this.props;
+
+    if (!film) return &lt;div className="main-view" />;
+    if (film &amp;&amp; userInfo) {
+      return (
+        &lt;Container>
+          &lt;Row className="film-view-container">
+            &lt;Col lg={4}>
+              &lt;div className="film-view">
+                &lt;img className="film-poster" src={film.ImagePath} />
+              &lt;/div>
+            &lt;/Col>
+            &lt;Col lg={{ span: 6, offset: 1 }}>
+              &lt;div className="film-block">
+                &lt;div className="film-title">
+                  &lt;span className="value">{film.Title}&lt;/span>
+                &lt;/div>
+                &lt;div className="film-description">
+                  &lt;span className="value">{film.Description}&lt;/span>
+                &lt;/div>
+                &lt;div className="film-genre">
+                  &lt;span className="label">Genre:&amp;nbsp;&lt;/span>
+                  &lt;Link to={`/films/genres/${film.Genre.Name}`}>
+                    &lt;span className="value-link">{film.Genre.Name}&lt;/span>
+                  &lt;/Link>
+                &lt;/div>
+                &lt;div className="film-director">
+                  &lt;span className="label">Director:&amp;nbsp;&lt;/span>
+                  &lt;Link to={`/films/directors/${film.Director.Name}`}>
+                    &lt;span className="value-link">{film.Director.Name}&lt;/span>
+                  &lt;/Link>
+                &lt;/div>
+                &lt;div>
+                  &lt;Button
+                    onClick={() => this.addQueueItem.bind(this)}
+                    variant="outline-danger"
+                    className="btn"
+                  >
+                    add film to queue
+                  &lt;/Button>
+                &lt;/div>
+                &lt;Link to="/">
+                  &lt;Button variant="outline-danger" className="btn">
+                    home
+                  &lt;/Button>
+                &lt;/Link>
+              &lt;/div>
+            &lt;/Col>
+          &lt;/Row>
+        &lt;/Container>
+      );
+    }
+  }
+}
+
+FilmView.propTypes = {
+  film: PropTypes.shape({
+    Title: PropTypes.string,
+    ImagePath: PropTypes.string,
+    Description: PropTypes.string,
+    Genre: PropTypes.exact({
+      _id: PropTypes.string,
+      Name: PropTypes.string,
+      Description: PropTypes.string,
+    }),
+    Director: PropTypes.shape({
+      Name: PropTypes.string,
+      Bio: PropTypes.string,
+    }),
+    ImagePath: PropTypes.string,
+    Queue: PropTypes.bool,
+  }),
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addQueueItem">addQueueItem</a></li><li><a href="global.html#goBack">goBack</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Apr 23 2021 21:10:44 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,19 +1,19 @@
 {
   "name": "fataleflix",
   "version": "1.0.0",
+  "description": "A simple app filled with unsettling woman-centered films.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
   "engines": {
     "node": "14.15.4",
     "npm": "7.10.0"
   },
-  "description": "A simple app filled with unsettling woman-centered films.",
-  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/membraned/fataleFlix.git"
-  },
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -24,15 +24,11 @@
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.8.1",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.20",
-    "method-override": "^3.0.0",
     "mongoose": "^5.12.5",
     "morgan": "^1.10.0",
-    "parcel-bundler": "^1.12.4",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -43,6 +39,12 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "eslint": "^7.16.0"
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.25.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0"
   }
 }

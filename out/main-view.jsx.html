@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: main-view.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: main-view.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ *@description This component is the home page of the app.
+ *@requires React
+ *@requires Prop-Types
+ *@requires React-Router-Dom
+ *@requires React-Bootstrap
+ *@requires FeatherIcon
+ *@access private
+ */
+
+import React from "react";
+import axios from "axios";
+
+import { connect } from "react-redux";
+
+import PropTypes from "prop-types";
+
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+
+import { setFilms, setFilter, setProfile } from "../../actions/actions";
+
+import FilmsList from "../films-list/films-list";
+import { FilmCard } from "../film-card/film-card";
+import { FilmView } from "../film-view/film-view";
+import { LoginView } from "../login-view/login-view";
+import { RegistrationView } from "../registration-view/registration-view";
+import { DirectorView } from "../director-view/director-view";
+import { GenreView } from "../genre-view/genre-view";
+import { ProfileView } from "../profile-view/profile-view";
+
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import FormControl from "react-bootstrap/FormControl";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Row from "react-bootstrap/Row";
+
+import "./main-view.scss";
+
+export class MainView extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      userInfo: null,
+    };
+  }
+
+  componentDidMount() {
+    let accessToken = localStorage.getItem("token");
+    if (accessToken !== null) {
+      const user = localStorage.getItem("user");
+      this.getFilms(accessToken);
+      this.getUserInfo(user, accessToken);
+      window.scrollTo(0, 0);
+    }
+  }
+  //called in componentDidMount
+  /**
+   * gets films from the API
+   *@function getFilms
+   *@param {string} token
+   *@returns {array} films
+   */
+  getFilms(token) {
+    axios
+      .get("https://fataleflix.herokuapp.com/films", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        this.props.setFilms(response.data);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+  }
+  /**
+   * gets the user's info from the API
+   *@function getUserInfo
+   *@param {string} token
+   *@returns {object} userInfo
+   */
+
+  getUserInfo(token) {
+    axios
+      .get(
+        `https://fataleflix.herokuapp.com/users/${localStorage.getItem(
+          "user"
+        )}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        this.setState({
+          userInfo: response.data,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  /**
+   * stores user's name and token in localStorage
+   *@function onLoggedIn
+   *@returns {string} token
+   *@returns {string} user
+   */
+  onLoggedIn(authData) {
+    console.log(authData);
+    //authData refers to the username and the token
+    this.setState({
+      user: authData.user.Username,
+    });
+    //stores the token and username - setItem takes in a key/value pair
+    localStorage.setItem("token", authData.token);
+    localStorage.setItem("user", authData.user.Username);
+    this.getFilms(authData.token);
+    this.getUserInfo(authData.token);
+  }
+  //called in the render()
+  /**
+   * Removes user's name and token in localStorage
+   *@function onLoggedOut
+   *@returns {string} token
+   *@returns {string} user
+   */
+  onLoggedOut() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    this.setState({
+      user: null,
+    });
+
+    window.open("/client/login", "_self");
+  }
+
+  render() {
+    let { films } = this.props;
+    let { user, userInfo } = this.state;
+
+    // if (!user) return &lt;LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
+    // //before the films have been loaded
+    if (!films) return &lt;div className="main-view" />;
+
+    return (
+      &lt;Router basename="/client">
+        &lt;Navbar
+          sticky="top"
+          className="navbar-style"
+          variant="dark"
+          expand="lg"
+        >
+          &lt;Navbar.Brand className="navbar-brand" href="/">
+            &lt;img
+              width="150px"
+              src="https://i.postimg.cc/MT7tXv8K/fataleflixlogo.png"
+            >&lt;/img>
+          &lt;/Navbar.Brand>
+          &lt;Navbar.Toggle aria-controls="basic-navbar-nav" />
+          &lt;Navbar.Collapse id="basic-navbar-nav">
+            &lt;Nav className="mr-auto">
+              &lt;Nav.Link href="/client">home&lt;/Nav.Link>
+              &lt;Nav.Link href="/client/users/:Username">profile&lt;/Nav.Link>
+              &lt;Nav.Link href="/client/register">register&lt;/Nav.Link>
+              &lt;Nav.Link href="/client/login">login&lt;/Nav.Link>
+              &lt;Nav.Link onClick={() => this.onLoggedOut()}>logout&lt;/Nav.Link>
+            &lt;/Nav>
+            &lt;Form inline>
+              &lt;FormControl
+                type="text"
+                placeholder="search for a film!"
+                className="mr-sm-2"
+              />
+              &lt;Button variant="outline-danger" className="search-button">
+                search
+              &lt;/Button>
+            &lt;/Form>
+          &lt;/Navbar.Collapse>
+        &lt;/Navbar>
+        &lt;div className="main-view">
+          &lt;Container fluid>
+            &lt;Row className="main-container">
+              &lt;Route
+                exact
+                path="/"
+                render={() => {
+                  if (!user)
+                    return (
+                      &lt;LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                    );
+                  return &lt;FilmsList films={films} />;
+                }}
+              />
+
+              &lt;Route path="/register" render={() => &lt;RegistrationView />} />
+
+              &lt;Route
+                exact
+                path="/films/:filmId"
+                render={({ match }) => (
+                  &lt;FilmView
+                    film={films.find((f) => f._id === match.params.filmId)}
+                  />
+                )}
+              />
+
+              &lt;Route
+                path="/films/genres/:name"
+                render={({ match }) => {
+                  if (!films) return &lt;div className="main-view" />;
+                  return (
+                    &lt;GenreView
+                      genre={
+                        films.find((f) => f.Genre.Name === match.params.name)
+                          .Genre
+                      }
+                      otherFilms={films.filter(
+                        (f) => f.Genre.Name === match.params.name
+                      )}
+                    />
+                  );
+                }}
+              />
+
+              &lt;Route
+                path="/films/directors/:name"
+                render={({ match }) => (
+                  &lt;DirectorView
+                    director={films.find(
+                      (f) => f.Director.Name === match.params.name
+                    )}
+                  />
+                )}
+              />
+              &lt;Route
+                path="/users/:Username"
+                render={() => (
+                  &lt;ProfileView user={user} films={films} userInfo={userInfo} />
+                )}
+              />
+            &lt;/Row>
+          &lt;/Container>
+        &lt;/div>
+      &lt;/Router>
+    );
+  }
+}
+
+let mapStateToProps = (state) => {
+  return { films: state.films, userInfo: state.userInfo };
+};
+
+export default connect(mapStateToProps, { setFilms, setUser })(MainView);
+
+MainView.propTypes = {
+  film: PropTypes.shape({
+    Title: PropTypes.string,
+    Description: PropTypes,
+    Genre: PropTypes.shape({
+      Name: PropTypes.string,
+      Description: PropTypes,
+    }),
+    Director: PropTypes.shape({
+      Name: PropTypes.string,
+      Bio: PropTypes.string,
+    }),
+    ImagePath: PropTypes.string,
+    Featured: PropTypes.bool,
+  }),
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#getFilms">getFilms</a></li><li><a href="global.html#getUserInfo">getUserInfo</a></li><li><a href="global.html#onLoggedIn">onLoggedIn</a></li><li><a href="global.html#onLoggedOut">onLoggedOut</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Fri Apr 23 2021 21:11:26 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
