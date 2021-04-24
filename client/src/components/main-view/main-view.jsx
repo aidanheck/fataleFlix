@@ -1,3 +1,8 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable no-shadow */
+/* eslint-disable no-useless-constructor */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-underscore-dangle */
@@ -44,10 +49,10 @@ export class MainView extends Component {
 
   componentDidMount() {
     const accessToken = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
     if (accessToken !== null) {
-      const user = localStorage.getItem('user');
-      this.getFilms(accessToken);
       this.props.setUser(user);
+      this.getFilms(accessToken);
     }
   }
   /**
@@ -111,7 +116,8 @@ export class MainView extends Component {
           expand="lg"
         >
           <Navbar.Brand as={Link} to="/" className="navbar-brand">
-            <img alt="fataleflix logo"
+            <img
+              alt="fataleflix logo"
               width="150px"
               src="https://i.postimg.cc/MT7tXv8K/fataleflixlogo.png"
             />
@@ -153,7 +159,7 @@ export class MainView extends Component {
                 }}
               />
 
-              <Route exact path="/register" render={() => <RegistrationView />} />
+              <Route exact path="/client/register" render={() => <RegistrationView />} />
 
               <Route
                 exact
